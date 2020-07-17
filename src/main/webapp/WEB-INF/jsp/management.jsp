@@ -22,12 +22,6 @@
     <button type="button" onclick='window.location.href = "/management/users"'>View users</button>
 </div>
 
-<div>
-    <a class="btn btn-lg" onclick="document.forms['logoutForm'].submit()"><spring:message code="home.logout"/></a>
-    <c:if test="${pageContext.request.userPrincipal.name != null}">
-        <form id="logoutForm" method="POST" action="${contextPath}/logout"></form>
-    </c:if>
-</div>
 
 </body>
 </html>
