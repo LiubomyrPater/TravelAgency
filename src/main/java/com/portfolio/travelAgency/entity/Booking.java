@@ -42,4 +42,6 @@ public class Booking {
 
     private boolean earlyArrival;
 
+    //private boolean paid;
+
 }

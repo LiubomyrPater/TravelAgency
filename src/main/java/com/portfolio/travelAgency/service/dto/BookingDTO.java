@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 public class BookingDTO {
 
+    private String user;
+
     private String city;
 
     private String hotel;
