@@ -11,8 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CityRepository extends JpaRepository<City, Long> {
 
-    //List<City> findAllBy();
-
-
     Optional<City> findByName(String name);
+
+    City findByHotels(Hotel hotel);
 }

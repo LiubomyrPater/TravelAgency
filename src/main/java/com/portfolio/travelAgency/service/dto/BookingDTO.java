@@ -22,9 +22,11 @@ public class BookingDTO {
 
     private Integer price;
 
-    private LocalDate arrival;
+    //private LocalDate arrival;
+    private String arrival;
 
-    private LocalDate departure;
+    //private LocalDate departure;
+    private String departure;
 
     private LocalDateTime createMoment;
 

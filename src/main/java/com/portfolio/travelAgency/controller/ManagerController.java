@@ -113,9 +113,9 @@ public class ManagerController {
 
     @GetMapping("/management/users")
     public String allUsers (Model model){
-        List<User> users = userRepository.findAll();
+
         List<UserDTO> userDTOS = new ArrayList<>();
-        users.forEach(x -> userDTOS.add(userMapper.toDTO(x)));
+        userRepository.findAll().forEach(x -> userDTOS.add(userMapper.toDTO(x)));
         model.addAttribute("users", userDTOS);
         return "users";
     }

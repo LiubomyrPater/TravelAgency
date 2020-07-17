@@ -35,14 +35,22 @@
 
     <form:form method="POST" modelAttribute="bookingForm" class="form-signin">
 
+
         <sec:authorize access="hasRole('ROLE_MANAGER')">
             <spring:bind path="user">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:select type="text" path="user" class="form-control">
-                        <form:option value="--- Select ---" label="--- Select user ---"/>
                         <form:options items="${users}"/>
                     </form:select>
                     <form:errors path="user"></form:errors>
+                </div>
+            </spring:bind>
+        </sec:authorize>
+
+        <sec:authorize access="hasRole('ROLE_USER')">
+            <spring:bind path="user">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input readonly="true" type="text" path="user" class="form-control"></form:input>
                 </div>
             </spring:bind>
         </sec:authorize>
@@ -62,6 +70,31 @@
             }
         </script>
 
+
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <spring:bind path="arrival">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="date" path="arrival" class="form-control"
+                                    placeholder="Arrival"></form:input>
+                        <form:errors path="arrival"></form:errors>
+                    </div>
+                </spring:bind>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <spring:bind path="departure">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="date" path="departure" class="form-control"
+                                    placeholder="departure"></form:input>
+                        <form:errors path="departure"></form:errors>
+                    </div>
+                </spring:bind>
+            </div>
+        </div>
+
+
+
         <spring:bind path="hotel">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="hotel" class="form-control">
@@ -72,39 +105,13 @@
             </div>
         </spring:bind>
 
-        <spring:bind path="arrival">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="date" path="arrival" class="form-control"
-                            placeholder="Arrival"></form:input>
-                <form:errors path="arrival"></form:errors>
-            </div>
-        </spring:bind>
-        <spring:bind path="earlyArrival">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:checkbox path="earlyArrival" class="form-control" label="Early arrival"></form:checkbox>
-                <form:errors path="earlyArrival"></form:errors>
-            </div>
-        </spring:bind>
 
-        <spring:bind path="departure">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="date" path="departure" class="form-control"
-                            placeholder="departure"></form:input>
-                <form:errors path="departure"></form:errors>
-            </div>
-        </spring:bind>
 
-        <spring:bind path="lateDeparture">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:checkbox path="lateDeparture" class="form-control" label="Late departure"></form:checkbox>
-                <form:errors path="lateDeparture"></form:errors>
-            </div>
-        </spring:bind>
 
         <spring:bind path="typeRoom">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="typeRoom" class="form-control">
-                    <form:option value="--- Select ---" label="--- Select type ---"/>
+                    <form:option value="--- Select ---" label="--- Select type room ---"/>
                     <form:options items="${roomTypes}"/>
                 </form:select>
                 <form:errors path="typeRoom"></form:errors>
@@ -127,7 +134,27 @@
             </div>
         </spring:bind>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Book</button>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <spring:bind path="earlyArrival">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:checkbox path="earlyArrival" class="form-control" label="Early arrival"></form:checkbox>
+                        <form:errors path="earlyArrival"></form:errors>
+                    </div>
+                </spring:bind>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <spring:bind path="lateDeparture">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:checkbox path="lateDeparture" class="form-control" label="Late departure"></form:checkbox>
+                        <form:errors path="lateDeparture"></form:errors>
+                    </div>
+                </spring:bind>
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Reserve</button>
     </form:form>
 
 </div>
