@@ -1,7 +1,7 @@
 package com.portfolio.travelAgency.repository;
 
+import com.portfolio.travelAgency.entity.City;
 import com.portfolio.travelAgency.entity.Hotel;
-import com.portfolio.travelAgency.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +12,11 @@ import java.util.Optional;
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     Optional<Hotel> findByName(String name);
+
+    List<Hotel> findByCity(City city);
+
+
+
 
 
 }

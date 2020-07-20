@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <title>Travel Agency ${pageContext.request.userPrincipal.name}</title>
-    <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/other_script.js"></script>
@@ -42,7 +42,7 @@
                     <form:select type="text" path="user" class="form-control">
                         <form:options items="${users}"/>
                     </form:select>
-                    <form:errors path="user"></form:errors>
+                   <%-- <form:errors path="user"></form:errors>--%>
                 </div>
             </spring:bind>
         </sec:authorize>
@@ -57,19 +57,37 @@
 
         <spring:bind path="city">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:select type="text" path="city" class="form-control"  onchange="city_select(this)">
+                <form:select type="text" path="city" id="selectCity" class="form-control" onchange="city_select()">
                     <form:option value="--- Select ---" label="--- Select city ---"/>
                     <form:options items="${cities}"/>
                 </form:select>
-                <form:errors path="city"></form:errors>
+                <%--<form:errors path="city"></form:errors>--%>
             </div>
         </spring:bind>
         <script>
-            function city_select(obj) {
-                console.log(obj.options[obj.selectedIndex].value)
+            function city_select() {
+                $('#selectHotel').removeAttr('disabled');
+                $.ajax({
+                    url: "home/citySelectForm?city=" + $("#selectCity option:selected").val(),
+                    success: function(result){
+                        clearDropDownMenu();
+                        $.each(JSON.parse(result), function(index, value) {
+                            createDropDownMenu(value.name)
+                        });
+                    }
+                });
+            }
+            function clearDropDownMenu() {
+                const dropDown = document.getElementById("selectHotel");
+                dropDown.innerHTML = "";
+            }
+            function createDropDownMenu(name) {
+                const dropDown = document.getElementById("selectHotel");
+                const option = document.createElement("option");
+                option.textContent = name;
+                dropDown.appendChild(option);
             }
         </script>
-
 
 
         <div class="row">
@@ -97,13 +115,39 @@
 
         <spring:bind path="hotel">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="hotel" class="form-control">
-                    <form:option value="--- Select ---" label="--- Select hotel ---"/>
-                    <form:options items="${hotels}"/>
+                <form:select type="text" path="hotel" id="selectHotel" class="form-control" disabled="true" onclick="hotel_select()">
+                    <%--<form:option value="--- Select ---" label="--- Select hotel ---"/>
+                    <form:options items="${hotels}"/>--%>
                 </form:select>
-                <form:errors path="hotel"></form:errors>
+                <%--<form:errors path="hotel"></form:errors>--%>
             </div>
         </spring:bind>
+        <script>
+            function hotel_select() {
+                $('#selectRoom').removeAttr('disabled');
+                $.ajax({
+                    url: "home/hotelSelectForm?hotel=" + $("#selectHotel option:selected").val() + "&city=" + $("#selectCity option:selected").val(),
+                    success: function(result){
+                        clearDropDownMenu2();
+                        $.each(JSON.parse(result), function(index, value) {
+                            createDropDownMenu2(value.number)
+                        });
+                    }
+                });
+            }
+            function clearDropDownMenu2() {
+                const dropDown = document.getElementById("selectRoom");
+                dropDown.innerHTML = "";
+            }
+            function createDropDownMenu2(name) {
+                const dropDown = document.getElementById("selectRoom");
+                const option = document.createElement("option");
+                option.textContent = name;
+                dropDown.appendChild(option);
+            }
+
+        </script>
+
 
 
 
@@ -126,13 +170,18 @@
 
         <spring:bind path="room">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="room" class="form-control">
-                    <form:option value="--- Select ---" label="--- Select room ---"/>
-                    <form:options items="${rooms}"/>
+                <form:select type="text" path="room" id="selectRoom" class="form-control" disabled="true" onclick="room_select()">
+                    <%--<form:option value="--- Select ---" label="--- Select room ---"/>
+                    <form:options items="${rooms}"/>--%>
                 </form:select>
                 <form:errors path="room"></form:errors>
             </div>
         </spring:bind>
+        <script>
+            function room_select() {
+                $('#reserveButton').removeAttr('disabled');
+            }
+        </script>
 
 
         <div class="row">
@@ -154,10 +203,12 @@
             </div>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Reserve</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="reserveButton" disabled>Reserve</button>
+
     </form:form>
 
 </div>
+
 
 
 </body>

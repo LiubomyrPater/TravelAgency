@@ -21,6 +21,9 @@ public class Hotel {
 
     private String name;
 
+    @ManyToOne
+    private City city;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id")
     private Set<Room> rooms = new HashSet<>();
