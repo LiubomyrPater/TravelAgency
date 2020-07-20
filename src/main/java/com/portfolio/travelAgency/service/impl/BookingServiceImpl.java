@@ -7,6 +7,8 @@ import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,5 +20,14 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void createNewBooking(BookingDTO bookingDTO) {
         bookingRepository.save(bookingMapper.toEntity(bookingDTO));
+    }
+
+    @Override
+    public boolean matchDateArrival(String date) {
+        LocalDate choseDate = LocalDate.parse(date);
+
+        if (choseDate.isBefore(LocalDate.now())){
+            return false;
+        }else return true;
     }
 }

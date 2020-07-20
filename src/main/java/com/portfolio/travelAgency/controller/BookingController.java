@@ -5,6 +5,7 @@ import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.repository.CityRepository;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
+import com.portfolio.travelAgency.service.interfaces.BookingService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class BookingController {
@@ -21,12 +22,16 @@ public class BookingController {
     private final HotelRepository hotelRepository;
     private final CityRepository cityRepository;
     private final RoomRepository roomRepository;
+    private final BookingService bookingService;
 
 
-    public BookingController(HotelRepository hotelRepository, CityRepository cityRepository, RoomRepository roomRepository) {
+
+    public BookingController(HotelRepository hotelRepository, CityRepository cityRepository, RoomRepository roomRepository, BookingService bookingService) {
         this.hotelRepository = hotelRepository;
         this.cityRepository = cityRepository;
         this.roomRepository = roomRepository;
+
+        this.bookingService = bookingService;
     }
 
     @GetMapping("/home/citySelectForm")
@@ -55,5 +60,17 @@ public class BookingController {
         }
         System.out.println(jsonArray.toString());
         return jsonArray.toString();
+    }
+
+
+    @GetMapping("/home/dateArrivalSelect")
+    @ResponseBody
+    public String getArrival(@RequestParam String arrival){
+
+        System.out.println(arrival);
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("decide", bookingService.matchDateArrival(arrival));
+        return jsonObject.toString();
     }
 }

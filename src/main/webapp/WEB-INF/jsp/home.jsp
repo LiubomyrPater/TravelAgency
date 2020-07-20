@@ -91,15 +91,32 @@
 
 
         <div class="row">
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-6" id="7">
                 <spring:bind path="arrival">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="date" path="arrival" class="form-control"
-                                    placeholder="Arrival"></form:input>
+                        <form:input type="date" path="arrival" class="form-control" id="dateArrival" onchange="dateArrivalSelect()"
+                                    placeholder="Arrival" ></form:input>
                         <form:errors path="arrival"></form:errors>
                     </div>
                 </spring:bind>
             </div>
+            <script>
+                function dateArrivalSelect() {
+                    $.ajax({
+                        url: "home/dateArrivalSelect?arrival=" + $("#dateArrival").val(),
+                        success: function(result){
+                            $.each(JSON.parse(result), function(index, value) {
+                                if(!value){
+                                    alert("Wrong date. Before today");
+
+                                }
+                            });
+                        }
+                    });
+                }
+            </script>
+
+
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
