@@ -177,19 +177,23 @@
 
         <spring:bind path="typeRoom">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="typeRoom" class="form-control" disabled="true" id="selectType" onclick="type_select">
+                <form:select type="text" path="typeRoom" class="form-control" disabled="true" id="selectType" onclick="type_select()">
                     <%--<form:option value="--- Select ---" label="--- Select type room ---"/>
                     <form:options items="${roomTypes}"/>--%>
                 </form:select>
-                <form:errors path="typeRoom"></form:errors>
+               <%-- <form:errors path="typeRoom"></form:errors>--%>
             </div>
         </spring:bind>
         <script>
             function type_select() {
+                console.log("jdlkfsjfsd")
                 $('#selectRoom').removeAttr('disabled');
                 $.ajax({
-                    url: "home/typeSelectForm?hotel=" + $("#selectType option:selected").val()
-                    + "&city=" + $("#selectCity option:selected").val(),
+                    url: "home/typeSelectForm?hotel=" + $("#selectHotel option:selected").val()
+                    + "&city=" + $("#selectCity option:selected").val()
+                    + "&arrival=" + $("#dateArrival").val()
+                    + "&departure=" + $("#dateDeparture").val()
+                    + "&type=" + $("#selectType option:selected").val,
                     success: function(result){
                         clearDropDownRoom();
                         $.each(JSON.parse(result), function(index, value) {

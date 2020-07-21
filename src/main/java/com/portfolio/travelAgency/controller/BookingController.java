@@ -7,6 +7,7 @@ import com.portfolio.travelAgency.repository.CityRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
+import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -25,13 +26,15 @@ public class BookingController {
     private final BookingService bookingService;
     private final HotelService hotelService;
     private final RoomTypeService roomTypeService;
+    private final RoomService roomService;
 
-    public BookingController(CityRepository cityRepository, RoomRepository roomRepository, BookingService bookingService, HotelService hotelService, RoomTypeService roomTypeService) {
+    public BookingController(CityRepository cityRepository, RoomRepository roomRepository, BookingService bookingService, HotelService hotelService, RoomTypeService roomTypeService, RoomService roomService) {
         this.cityRepository = cityRepository;
         this.roomRepository = roomRepository;
         this.bookingService = bookingService;
         this.hotelService = hotelService;
         this.roomTypeService = roomTypeService;
+        this.roomService = roomService;
     }
 
 /*
@@ -99,5 +102,26 @@ public class BookingController {
             jsonArrayTypes.add(jsonObjectRoomType);
         }
         return jsonArrayTypes.toString();
+    }
+
+    @GetMapping("/home/typeSelectForm")
+    @ResponseBody
+    public String getType(@RequestParam String arrival,
+                          @RequestParam String departure,
+                          @RequestParam String city,
+                          @RequestParam String hotel,
+                          @RequestParam String type){
+        System.out.println("Hello");
+
+        List<Room> rooms = roomService.findByCityDateHotelType(city, arrival, departure, hotel, type);
+
+        JSONArray jsonArrayRoom = new JSONArray();
+        for (Room r: rooms) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("number", r.getNumber());
+            jsonArrayRoom.add(jsonObject);
+        }
+        System.out.println(jsonArrayRoom.toString());
+        return jsonArrayRoom.toString();
     }
 }
