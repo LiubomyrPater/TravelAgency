@@ -34,7 +34,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("/home/citySelectForm")
+/*    @GetMapping("/home/citySelectForm")
     @ResponseBody
     public String getHotels(@RequestParam String city) {
         JSONArray jsonArray = new JSONArray();
@@ -45,7 +45,7 @@ public class BookingController {
             jsonArray.add(jsonObject);
         }
         return jsonArray.toString();
-    }
+    }*/
 
     @GetMapping("/home/hotelSelectForm")
     @ResponseBody
@@ -67,10 +67,34 @@ public class BookingController {
     @ResponseBody
     public String getArrival(@RequestParam String arrival){
 
-        System.out.println(arrival);
         JSONObject jsonObject = new JSONObject();
-
         jsonObject.put("decide", bookingService.matchDateArrival(arrival));
         return jsonObject.toString();
+    }
+
+
+    @GetMapping("/home/dateDepartureSelect")
+    @ResponseBody
+    public String getDeparture(@RequestParam String arrival,
+                               @RequestParam String departure,
+                               @RequestParam String city){
+
+        JSONObject jsonObjectDecide = new JSONObject();
+        boolean decide = bookingService.matchDateDeparture(arrival, departure);
+        jsonObjectDecide.put("decide", decide);
+
+        if (decide){
+            JSONArray jsonArrayHotels = new JSONArray();
+            List<Hotel> hotels = hotelRepository.findByCity(cityRepository.findByName(city).get());
+            for (Hotel h: hotels) {
+                JSONObject jsonObjectHotel = new JSONObject();
+                jsonObjectHotel.put("name", h.getName());
+                jsonArrayHotels.add(jsonObjectHotel);
+            }
+
+            return jsonArrayHotels.toString();
+        }else {
+            return jsonObjectDecide.toString();
+        }
     }
 }

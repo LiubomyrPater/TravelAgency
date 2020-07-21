@@ -33,7 +33,7 @@
 
 <div class="container">
 
-    <form:form method="POST" modelAttribute="bookingForm" class="form-signin">
+    <form:form method="POST" modelAttribute="bookingForm" class="form-signin" id="777">
 
 
         <sec:authorize access="hasRole('ROLE_MANAGER')">
@@ -66,27 +66,9 @@
         </spring:bind>
         <script>
             function city_select() {
-                $('#selectHotel').removeAttr('disabled');
-                $.ajax({
-                    url: "home/citySelectForm?city=" + $("#selectCity option:selected").val(),
-                    success: function(result){
-                        clearDropDownMenu();
-                        $.each(JSON.parse(result), function(index, value) {
-                            createDropDownMenu(value.name)
-                        });
-                    }
-                });
+                /*Refresh whole form*/
             }
-            function clearDropDownMenu() {
-                const dropDown = document.getElementById("selectHotel");
-                dropDown.innerHTML = "";
-            }
-            function createDropDownMenu(name) {
-                const dropDown = document.getElementById("selectHotel");
-                const option = document.createElement("option");
-                option.textContent = name;
-                dropDown.appendChild(option);
-            }
+
         </script>
 
 
@@ -108,7 +90,8 @@
                             $.each(JSON.parse(result), function(index, value) {
                                 if(!value){
                                     alert("Wrong date. Before today");
-
+                                }else {
+                                    $('#dateDeparture').removeAttr('disabled')
                                 }
                             });
                         }
@@ -116,16 +99,46 @@
                 }
             </script>
 
-
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="date" path="departure" class="form-control"
+                        <form:input type="date" path="departure" disabled="true" class="form-control" id="dateDeparture" onchange="dateDepartureSelect()"
                                     placeholder="departure"></form:input>
                         <form:errors path="departure"></form:errors>
                     </div>
                 </spring:bind>
             </div>
+            <script>
+                function dateDepartureSelect() {
+                    $('#selectHotel').removeAttr('disabled');
+                    $.ajax({
+                        url: "home/dateDepartureSelect?arrival=" + $("#dateArrival").val()
+                        + "&departure=" + $("#dateDeparture").val()
+                        + "&city=" + $("#selectCity option:selected").val(),
+                        success: function(result){
+                            clearDropDownHotel();
+                            $.each(JSON.parse(result), function(index, value) {
+                                if(!value){
+                                    alert("Wrong date. Before arrival or before today");
+                                }else {
+                                    createDropDownHotel(value.name);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                function clearDropDownHotel() {
+                    const dropDown = document.getElementById("selectHotel");
+                    dropDown.innerHTML = "";
+                }
+                function createDropDownHotel(name) {
+                    const dropDown = document.getElementById("selectHotel");
+                    const option = document.createElement("option");
+                    option.textContent = name;
+                    dropDown.appendChild(option);
+                }
+            </script>
         </div>
 
 

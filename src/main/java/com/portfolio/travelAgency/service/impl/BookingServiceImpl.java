@@ -30,4 +30,16 @@ public class BookingServiceImpl implements BookingService {
             return false;
         }else return true;
     }
+
+    @Override
+    public boolean matchDateDeparture(String dateArrival, String dateDeparture) {
+
+        LocalDate arrival = LocalDate.parse(dateArrival);
+        LocalDate departure = LocalDate.parse(dateDeparture);
+
+        if (departure.isBefore(arrival) || departure.isBefore(LocalDate.now())
+                || departure.isEqual(arrival) || departure.isEqual(LocalDate.now())){
+            return false;
+        }else return true;
+    }
 }

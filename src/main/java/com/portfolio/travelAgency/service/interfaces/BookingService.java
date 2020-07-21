@@ -6,4 +6,6 @@ public interface BookingService {
     void createNewBooking(BookingDTO bookingDTO);
 
     boolean matchDateArrival(String date);
+
+    boolean matchDateDeparture(String dateArrival, String dateDeparture);
 }
