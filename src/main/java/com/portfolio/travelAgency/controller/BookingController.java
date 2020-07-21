@@ -2,10 +2,12 @@ package com.portfolio.travelAgency.controller;
 
 import com.portfolio.travelAgency.entity.Hotel;
 import com.portfolio.travelAgency.entity.Room;
+import com.portfolio.travelAgency.entity.RoomType;
 import com.portfolio.travelAgency.repository.CityRepository;
-import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
+import com.portfolio.travelAgency.service.interfaces.HotelService;
+import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -13,40 +15,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
 public class BookingController {
 
-    private final HotelRepository hotelRepository;
     private final CityRepository cityRepository;
     private final RoomRepository roomRepository;
     private final BookingService bookingService;
+    private final HotelService hotelService;
+    private final RoomTypeService roomTypeService;
 
-
-
-    public BookingController(HotelRepository hotelRepository, CityRepository cityRepository, RoomRepository roomRepository, BookingService bookingService) {
-        this.hotelRepository = hotelRepository;
+    public BookingController(CityRepository cityRepository, RoomRepository roomRepository, BookingService bookingService, HotelService hotelService, RoomTypeService roomTypeService) {
         this.cityRepository = cityRepository;
         this.roomRepository = roomRepository;
-
         this.bookingService = bookingService;
+        this.hotelService = hotelService;
+        this.roomTypeService = roomTypeService;
     }
 
-/*    @GetMapping("/home/citySelectForm")
-    @ResponseBody
-    public String getHotels(@RequestParam String city) {
-        JSONArray jsonArray = new JSONArray();
-        List<Hotel> hotels = hotelRepository.findByCity(cityRepository.findByName(city).get());
-        for (Hotel h: hotels) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name", h.getName());
-            jsonArray.add(jsonObject);
-        }
-        return jsonArray.toString();
-    }*/
-
+/*
     @GetMapping("/home/hotelSelectForm")
     @ResponseBody
     public String getRooms(@RequestParam String hotel,
@@ -60,7 +48,7 @@ public class BookingController {
         }
         System.out.println(jsonArray.toString());
         return jsonArray.toString();
-    }
+    }*/
 
 
     @GetMapping("/home/dateArrivalSelect")
@@ -85,16 +73,31 @@ public class BookingController {
 
         if (decide){
             JSONArray jsonArrayHotels = new JSONArray();
-            List<Hotel> hotels = hotelRepository.findByCity(cityRepository.findByName(city).get());
-            for (Hotel h: hotels) {
+            List<Hotel> freeHotels = hotelService.findFreeHotels(city, arrival, departure);
+            for (Hotel h: freeHotels) {
                 JSONObject jsonObjectHotel = new JSONObject();
                 jsonObjectHotel.put("name", h.getName());
                 jsonArrayHotels.add(jsonObjectHotel);
             }
-
             return jsonArrayHotels.toString();
-        }else {
-            return jsonObjectDecide.toString();
+        }else return jsonObjectDecide.toString();
+    }
+
+
+    @GetMapping("/home/hotelSelectForm")
+    @ResponseBody
+    public String getType(@RequestParam String arrival,
+                          @RequestParam String departure,
+                          @RequestParam String city,
+                          @RequestParam String hotel){
+
+        JSONArray jsonArrayTypes = new JSONArray();
+        List<RoomType> roomTypes = roomTypeService.findRoomTypesAvailable(city, arrival, departure, hotel);
+        for (RoomType type: roomTypes) {
+            JSONObject jsonObjectRoomType = new JSONObject();
+            jsonObjectRoomType.put("name", type.getName());
+            jsonArrayTypes.add(jsonObjectRoomType);
         }
+        return jsonArrayTypes.toString();
     }
 }

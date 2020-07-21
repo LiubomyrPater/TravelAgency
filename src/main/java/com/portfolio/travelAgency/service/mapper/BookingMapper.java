@@ -26,15 +26,14 @@ public class BookingMapper {
         Booking result = new Booking();
 
         result.setArrival(LocalDate.parse(bookingDTO.getArrival()));
-        //result.setArrival(bookingDTO.getArrival());
         result.setDeparture(LocalDate.parse(bookingDTO.getDeparture()));
-        //result.setDeparture(bookingDTO.getDeparture());
         result.setCreateMoment(LocalDateTime.now());
         result.setEarlyArrival(bookingDTO.isEarlyArrival());
         result.setLateDeparture(bookingDTO.isLateDeparture());
         result.setUser(userRepository.findByEmail(bookingDTO.getUser()).get());
         result.setRoom(roomRepository.findByNumberAndHotel(bookingDTO.getRoom(),
-                hotelRepository.findByName(bookingDTO.getHotel()).get()));
+                hotelRepository.findByNameAndCity(bookingDTO.getHotel(),
+                        cityRepository.findByName(bookingDTO.getCity()).get()).get()));
 
         return result;
     }
@@ -46,9 +45,7 @@ public class BookingMapper {
         result.setUser(booking.getUser().getEmail());
         result.setPrice(booking.getPrice());
         result.setArrival(booking.getArrival().toString());
-        //result.setArrival(booking.getArrival());
         result.setDeparture(booking.getDeparture().toString());
-        //result.setDeparture(booking.getDeparture());
         result.setEarlyArrival(booking.isEarlyArrival());
         result.setLateDeparture(booking.isLateDeparture());
         result.setCreateMoment(booking.getCreateMoment());

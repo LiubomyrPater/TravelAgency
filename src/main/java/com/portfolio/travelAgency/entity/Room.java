@@ -33,4 +33,8 @@ public class Room {
     @JoinColumn(name = "room_id")
     private Set<Booking> bookings = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return number;
+    }
 }
