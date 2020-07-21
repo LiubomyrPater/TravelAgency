@@ -186,7 +186,7 @@
         </spring:bind>
         <script>
             function type_select() {
-                console.log("jdlkfsjfsd")
+                console.log("jdlkfsjfsd");
                 $('#selectRoom').removeAttr('disabled');
                 $.ajax({
                     url: "home/typeSelectForm?hotel=" + $("#selectHotel option:selected").val()
