@@ -21,37 +21,17 @@ import java.util.List;
 @Controller
 public class BookingController {
 
-    private final CityRepository cityRepository;
-    private final RoomRepository roomRepository;
     private final BookingService bookingService;
     private final HotelService hotelService;
     private final RoomTypeService roomTypeService;
     private final RoomService roomService;
 
-    public BookingController(CityRepository cityRepository, RoomRepository roomRepository, BookingService bookingService, HotelService hotelService, RoomTypeService roomTypeService, RoomService roomService) {
-        this.cityRepository = cityRepository;
-        this.roomRepository = roomRepository;
+    public BookingController(BookingService bookingService, HotelService hotelService, RoomTypeService roomTypeService, RoomService roomService) {
         this.bookingService = bookingService;
         this.hotelService = hotelService;
         this.roomTypeService = roomTypeService;
         this.roomService = roomService;
     }
-
-/*
-    @GetMapping("/home/hotelSelectForm")
-    @ResponseBody
-    public String getRooms(@RequestParam String hotel,
-                           @RequestParam String city) {
-        JSONArray jsonArray = new JSONArray();
-        List<Room> rooms = roomRepository.findRoomByHotelAndCity(hotel, cityRepository.findByName(city).get());
-        for (Room r: rooms) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("number", r.getNumber());
-            jsonArray.add(jsonObject);
-        }
-        System.out.println(jsonArray.toString());
-        return jsonArray.toString();
-    }*/
 
 
     @GetMapping("/home/dateArrivalSelect")

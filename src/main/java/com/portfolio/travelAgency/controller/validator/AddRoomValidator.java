@@ -22,6 +22,7 @@ public class AddRoomValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "number", "not.empty","Not empty space");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", "not.empty","Not empty space");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "hotel", "not.empty","Not empty space");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "not.empty","Not empty space");
 
 
     }

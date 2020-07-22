@@ -179,8 +179,7 @@
         <spring:bind path="typeRoom">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="typeRoom" class="form-control" disabled="true" id="selectType" onclick="type_select()">
-                    <%--<form:option value="--- Select ---" label="--- Select type room ---"/>
-                    <form:options items="${roomTypes}"/>--%>
+
                 </form:select>
                <%-- <form:errors path="typeRoom"></form:errors>--%>
             </div>

@@ -33,20 +33,8 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional
     public void addRoomToHotel(RoomDTO roomDTO) {
-
         Room room = roomMapper.toEntity(roomDTO);
         roomRepository.save(room);
-/*
-
-        Hotel persistedHotel = hotelRepository.findByName(roomDTO.getHotel())
-                .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + roomDTO.getHotel() + " was not found"));
-
-        Room persistedRoom = cityRepository.findByName(hotelDTO.getCity())
-                .orElseThrow(() -> new EntityNotFoundException("City with name " + hotelDTO.getCity() + " was not found"));
-
-        persistedHotel.getRooms().add(persistedRoom);
-
-        hotelRepository.save(persistedHotel);*/
     }
 
     @Override
@@ -61,8 +49,6 @@ public class RoomServiceImpl implements RoomService {
         RoomType roomType = roomTypeRepository.findByName(typeRoom).get();
 
         Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
-        /*Set<Room> rooms = persistedHotel.getRooms();*/
-
 
         boolean freeRoms = false;
 

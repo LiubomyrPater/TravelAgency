@@ -21,10 +21,45 @@
 <div class="container">
     <form:form method="POST" modelAttribute="addRoomForm" class="form-signin">
 
+        <spring:bind path="city">
+            <div class="form-group ${status.error ? 'has-error' : ''}" >
+                <form:select type="text" path="city" class="form-control" id="selectCity" onclick="select_city_form_add_room()">
+                    <form:options items="${cities}" />
+                </form:select>
+
+                <form:errors path="city"></form:errors>
+            </div>
+        </spring:bind>
+        <script>
+            function select_city_form_add_room() {
+
+                $.ajax({
+                    url: "citySelectForm?city=" + $("#selectCity option:selected").val(),
+                    success: function(result){
+                        clearDropDownHotel();
+                        $.each(JSON.parse(result), function(index, value) {
+                            createDropDownHotel(value.name)
+                        });
+                    }
+                });
+            }
+            function clearDropDownHotel() {
+                const dropDown = document.getElementById("selectHotel");
+                dropDown.innerHTML = "";
+            }
+            function createDropDownHotel(name) {
+                const dropDown = document.getElementById("selectHotel");
+                const option = document.createElement("option");
+                option.textContent = name;
+                dropDown.appendChild(option);
+            }
+
+        </script>
+
         <spring:bind path="hotel">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="hotel" class="form-control">
-                    <form:options items="${hotels}" />
+                <form:select type="text" path="hotel" class="form-control" id="selectHotel">
+                    <%--<form:options items="${hotels}" />--%>
                 </form:select>
 
                 <form:errors path="hotel"></form:errors>

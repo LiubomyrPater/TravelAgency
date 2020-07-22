@@ -21,6 +21,8 @@ public class RoomDTO {
 
     private String hotel;
 
+    private String city;
+
     private Set<Booking> bookings = new HashSet<>();
 
 }

@@ -3,6 +3,7 @@ package com.portfolio.travelAgency.service.mapper;
 import com.portfolio.travelAgency.entity.Hotel;
 import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.entity.RoomType;
+import com.portfolio.travelAgency.repository.CityRepository;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.repository.RoomTypeRepository;
 import com.portfolio.travelAgency.service.dto.RoomDTO;
@@ -17,13 +18,13 @@ public class RoomMapper {
 
     private final HotelRepository hotelRepository;
     private final RoomTypeRepository roomTypeRepository;
-
+    private final CityRepository cityRepository;
 
     public Room toEntity(RoomDTO roomDTO) {
 
         Room result = new Room();
 
-        Hotel persistedHotel = hotelRepository.findByName(roomDTO.getHotel())
+        Hotel persistedHotel = hotelRepository.findByNameAndCity(roomDTO.getHotel(), cityRepository.findByName(roomDTO.getCity()).get())
                 .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + roomDTO.getHotel() + " was not found"));
         result.setHotel(persistedHotel);
 

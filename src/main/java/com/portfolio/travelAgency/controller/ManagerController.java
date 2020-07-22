@@ -10,13 +10,12 @@ import com.portfolio.travelAgency.service.dto.UserDTO;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.mapper.UserMapper;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +86,10 @@ public class ManagerController {
     public String addRoomToHotel(Model model) {
         model.addAttribute("addRoomForm", new RoomDTO());
 
-        List<Hotel> hotels = hotelRepository.findAll();
-        List<String> hotelName = new ArrayList<>();
-        hotels.forEach(x-> hotelName.add(x.getName()));
-        model.addAttribute("hotels",hotelName);
+        List<City> cities = cityRepository.findAll();
+        List<String> cityName = new ArrayList<>();
+        cities.forEach(x-> cityName.add(x.getName()));
+        model.addAttribute("cities",cityName);
 
         List<RoomType> roomTypes = roomTypeRepository.findAll();
         List<String> roomTypeName = new ArrayList<>();
@@ -129,5 +128,17 @@ public class ManagerController {
         return "bookings";
     }
 
+    @GetMapping("/management/citySelectForm")
+    @ResponseBody
+    public String getHotelsInCity(@RequestParam String city){
 
+        JSONArray jsonArrayHotels = new JSONArray();
+        List<Hotel> hotels = hotelRepository.findByCity(cityRepository.findByName(city).get());
+        for (Hotel h: hotels) {
+            JSONObject jsonObjectHotel = new JSONObject();
+            jsonObjectHotel.put("name", h.getName());
+            jsonArrayHotels.add(jsonObjectHotel);
+        }
+        return jsonArrayHotels.toString();
+    }
 }
