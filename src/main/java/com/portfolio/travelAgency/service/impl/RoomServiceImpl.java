@@ -55,29 +55,37 @@ public class RoomServiceImpl implements RoomService {
 
         LocalDate arrivalDate = LocalDate.parse(arrival);
         LocalDate departureDate = LocalDate.parse(departure);
+        LocalDate today = LocalDate.now().minusDays(1);
 
         Hotel persistedHotel = hotelRepository.findByNameAndCity(hotel, cityRepository.findByName(city).get()).get();
         RoomType roomType = roomTypeRepository.findByName(typeRoom).get();
 
-        /*Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());*/
-        Set<Room> rooms = persistedHotel.getRooms();
+        Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
+        /*Set<Room> rooms = persistedHotel.getRooms();*/
 
 
+        boolean freeRoms = false;
 
-        List<Room> freeRooms = new ArrayList<>();
+        List<Room> freeRoomsList = new ArrayList<>();
         for (Room r: rooms) {
             Set<Booking> bookings = r.getBookings();
+            bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
             if (bookings.size() == 0){
-                freeRooms.add(r);
+                freeRoomsList.add(r);
             }else {
                 for (Booking b: bookings) {
                     if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || departureDate.isEqual(b.getArrival())))
                             || ((arrivalDate.isEqual(b.getDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
-                        freeRooms.add(r);
+                        freeRoms = true;
+                    }else {
+                        freeRoms = false;
                     }
+                }
+                if (freeRoms){
+                    freeRoomsList.add(r);
                 }
             }
         }
-        return freeRooms.stream().distinct().collect(Collectors.toList());
+        return freeRoomsList.stream().distinct().collect(Collectors.toList());
     }
 }

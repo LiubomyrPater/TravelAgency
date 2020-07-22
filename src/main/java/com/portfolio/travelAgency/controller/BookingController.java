@@ -111,7 +111,6 @@ public class BookingController {
                           @RequestParam String city,
                           @RequestParam String hotel,
                           @RequestParam String type){
-        System.out.println("Hello");
 
         List<Room> rooms = roomService.findByCityDateHotelType(city, arrival, departure, hotel, type);
 
@@ -121,7 +120,6 @@ public class BookingController {
             jsonObject.put("number", r.getNumber());
             jsonArrayRoom.add(jsonObject);
         }
-        System.out.println(jsonArrayRoom.toString());
         return jsonArrayRoom.toString();
     }
 }

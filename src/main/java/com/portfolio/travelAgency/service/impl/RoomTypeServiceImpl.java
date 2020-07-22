@@ -29,21 +29,30 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 
         LocalDate arrivalDate = LocalDate.parse(arrival);
         LocalDate departureDate = LocalDate.parse(departure);
+        LocalDate today = LocalDate.now().minusDays(1);
 
         Hotel persistedHotel = hotelRepository.findByNameAndCity(hotel, cityRepository.findByName(city).get()).get();
         Set<Room> rooms = persistedHotel.getRooms();
 
+        boolean freeRoom = false;
+
         List<RoomType> roomTypes = new ArrayList<>();
         for (Room r: rooms) {
             Set<Booking> bookings = r.getBookings();
+            bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
             if (bookings.size() == 0){
                 roomTypes.add(r.getType());
             }else {
                 for (Booking b: bookings) {
                     if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || departureDate.isEqual(b.getArrival())))
                             || ((arrivalDate.isEqual(b.getDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
-                        roomTypes.add(r.getType());
+                        freeRoom = true;
+                    }else {
+                        freeRoom = false;
                     }
+                }
+                if (freeRoom){
+                    roomTypes.add(r.getType());
                 }
             }
         }

@@ -48,23 +48,32 @@ public class HotelServiceImpl implements HotelService {
 
         LocalDate arrivalDate = LocalDate.parse(arrival);
         LocalDate departureDate = LocalDate.parse(departure);
+        LocalDate today = LocalDate.now().minusDays(1);
+
 
         List<Hotel> allHotelsByCity = hotelRepository.findByCity(cityRepository.findByName(city).get());
 
         List<Hotel> freeHotels = new ArrayList<>();
 
+        boolean freeRoms = false;
+
         for (Hotel h: allHotelsByCity) {
             Set<Room> rooms = h.getRooms();
             for (Room r: rooms) {
                 Set<Booking> bookings = r.getBookings();
+                bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
                 if (bookings.size() == 0){
                     freeHotels.add(h);
                 }else {
                     for (Booking b: bookings) {
                         if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || departureDate.isEqual(b.getArrival())))
                                 || ((arrivalDate.isEqual(b.getDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
-                            freeHotels.add(h);
-                        }
+                            freeRoms = true;
+                        }else
+                            freeRoms = false;
+                    }
+                    if (freeRoms){
+                        freeHotels.add(h);
                     }
                 }
             }
