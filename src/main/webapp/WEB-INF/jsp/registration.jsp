@@ -5,8 +5,6 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 
-
-
 <html lang="en">
 <head>
     <meta charset="utf-8">

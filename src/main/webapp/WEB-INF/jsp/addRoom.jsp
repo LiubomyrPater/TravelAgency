@@ -5,7 +5,6 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 
-
 <html>
 <head>
     <title>Add room</title>

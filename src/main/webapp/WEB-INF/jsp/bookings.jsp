@@ -17,7 +17,6 @@
 <body>
         <div class="bookings-container" id="bookings-container">
             <table class="table table-hover table-bordered table-condensed table-striped">
-
                 <tr>
                     <th><spring:message code="bookings.room.hotel"/></th>
                     <th><spring:message code="bookings.room.type"/></th>
@@ -29,21 +28,20 @@
                     <th><spring:message code="bookings.earlyArrival"/></th>
                     <th><spring:message code="bookings.lateDeparture"/></th>
                 </tr>
-
                 <tbody>
-                <c:forEach items="${bookings}" var="bookings">
-                    <tr>
-                        <td>${bookings.room.hotel}</td>
-                        <td>${bookings.room.type}</td>
-                        <td>${bookings.room.number}</td>
-                        <td>${bookings.price}</td>
-                        <td>${bookings.createMoment}</td>
-                        <td>${bookings.arrival}</td>
-                        <td>${bookings.departure}</td>
-                        <td>${bookings.earlyArrival}</td>
-                        <td>${bookings.lateDeparture}</td>
-                    </tr>
-                </c:forEach>
+                    <c:forEach items="${bookings}" var="bookings">
+                        <tr>
+                            <td>${bookings.room.hotel}</td>
+                            <td>${bookings.room.type}</td>
+                            <td>${bookings.room.number}</td>
+                            <td>${bookings.price}</td>
+                            <td>${bookings.createMoment}</td>
+                            <td>${bookings.arrival}</td>
+                            <td>${bookings.departure}</td>
+                            <td>${bookings.earlyArrival}</td>
+                            <td>${bookings.lateDeparture}</td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
