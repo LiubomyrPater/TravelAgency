@@ -35,14 +35,12 @@
 
     <form:form method="POST" modelAttribute="bookingForm" class="form-signin" id="777">
 
-
         <sec:authorize access="hasRole('ROLE_MANAGER')">
             <spring:bind path="user">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:select type="text" path="user" class="form-control">
                         <form:options items="${users}"/>
                     </form:select>
-                   <%-- <form:errors path="user"></form:errors>--%>
                 </div>
             </spring:bind>
         </sec:authorize>
@@ -61,7 +59,6 @@
                     <form:option value="--- Select ---" label="--- Select city ---"/>
                     <form:options items="${cities}"/>
                 </form:select>
-                <%--<form:errors path="city"></form:errors>--%>
             </div>
         </spring:bind>
         <script>
@@ -70,7 +67,6 @@
                 /*Refresh whole form*/
             }
         </script>
-
         <div class="row">
             <div class="col-xs-12 col-sm-6" id="7">
                 <spring:bind path="arrival">
@@ -97,7 +93,6 @@
                     });
                 }
             </script>
-
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -142,9 +137,7 @@
         <spring:bind path="hotel">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="hotel" id="selectHotel" class="form-control" disabled="true" onclick="hotel_select()">
-
                 </form:select>
-                <%--<form:errors path="hotel"></form:errors>--%>
             </div>
         </spring:bind>
         <script>
@@ -173,15 +166,11 @@
                 option.textContent = name;
                 dropDown.appendChild(option);
             }
-
         </script>
-
         <spring:bind path="typeRoom">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="typeRoom" class="form-control" disabled="true" id="selectType" onclick="type_select()">
-
                 </form:select>
-               <%-- <form:errors path="typeRoom"></form:errors>--%>
             </div>
         </spring:bind>
         <script>
@@ -211,8 +200,6 @@
                 option.textContent = name;
                 dropDown.appendChild(option);
             }
-
-
         </script>
 
         <spring:bind path="price">
@@ -224,8 +211,6 @@
         <spring:bind path="room">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="room" id="selectRoom" class="form-control" disabled="true" onclick="room_select()">
-                    <%--<form:option value="--- Select ---" label="--- Select room ---"/>
-                    <form:options items="${rooms}"/>--%>
                 </form:select>
                 <form:errors path="room"></form:errors>
             </div>
@@ -242,8 +227,6 @@
 
             }
         </script>
-
-
         <div class="row">
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="earlyArrival">
@@ -262,15 +245,9 @@
                 </spring:bind>
             </div>
         </div>
-
         <button class="btn btn-lg btn-primary btn-block" type="submit" id="reserveButton" disabled>Reserve</button>
-
     </form:form>
-
 </div>
-
-
-
 </body>
 </html>
 

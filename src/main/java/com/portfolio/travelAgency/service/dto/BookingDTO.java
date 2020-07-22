@@ -3,7 +3,6 @@ package com.portfolio.travelAgency.service.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,10 +21,8 @@ public class BookingDTO {
 
     private Integer price;
 
-    //private LocalDate arrival;
     private String arrival;
 
-    //private LocalDate departure;
     private String departure;
 
     private LocalDateTime createMoment;

@@ -12,8 +12,6 @@ import javax.persistence.Id;
 @Entity
 public class RoomType {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

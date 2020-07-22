@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-
 @Entity
 public class City {
 

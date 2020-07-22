@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -50,13 +49,9 @@ public class UserController {
 
         bookingDTO.setUser(principal.getName());
 
-        //model.addAttribute("bookingForm", new BookingDTO());
-
         List<String> cityName = new ArrayList<>();
         cityRepository.findAll().forEach(x-> cityName.add(x.getName()));
         model.addAttribute("cities",cityName);
-
-
 
         List<String> hotelName = new ArrayList<>();
         hotelRepository.findAll().forEach(x -> hotelName.add(x.getName()));

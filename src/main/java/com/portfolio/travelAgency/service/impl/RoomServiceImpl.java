@@ -5,7 +5,6 @@ import com.portfolio.travelAgency.repository.CityRepository;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.repository.RoomTypeRepository;
-import com.portfolio.travelAgency.service.dto.HotelDTO;
 import com.portfolio.travelAgency.service.dto.RoomDTO;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.mapper.RoomMapper;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

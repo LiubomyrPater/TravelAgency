@@ -100,9 +100,4 @@ public class LoginController {
         eventPublisher.publishEvent(new RegisterUserEvent(this, user, request.getContextPath()));
         return "success";
     }
-
-
-
-
-
 }

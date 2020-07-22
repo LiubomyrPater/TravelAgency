@@ -11,7 +11,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @AllArgsConstructor
 @Slf4j
@@ -28,8 +27,6 @@ public class RegisterUserEventListener {
 
         VerificationToken token = tokenRepository
                 .save(new VerificationToken(user, properties.getTokenTimeToLiveInHours()));
-
-
 
         SimpleMailMessage message = new SimpleMailMessage();
 

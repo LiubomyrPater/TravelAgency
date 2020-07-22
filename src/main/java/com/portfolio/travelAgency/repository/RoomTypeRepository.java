@@ -1,6 +1,5 @@
 package com.portfolio.travelAgency.repository;
 
-
 import com.portfolio.travelAgency.entity.RoomType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

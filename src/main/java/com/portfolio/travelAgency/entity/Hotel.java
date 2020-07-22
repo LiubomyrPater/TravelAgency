@@ -1,6 +1,5 @@
 package com.portfolio.travelAgency.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,8 +9,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-//@EqualsAndHashCode
-
 @Entity
 public class Hotel {
 

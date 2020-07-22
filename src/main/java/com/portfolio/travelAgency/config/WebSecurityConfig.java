@@ -29,20 +29,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
-    /**test*/
     @Autowired
     DataSource dataSource;
 
-    /**test*/
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }
-
-
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -63,7 +58,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/confirmRegistration",
                         "/success"
                 ).not().fullyAuthenticated()
-                //.antMatchers("/home/**").hasRole("USER")
                 .antMatchers("/management/**").hasRole("MANAGER")
                 .antMatchers("/resources/**").permitAll()
                 .anyRequest().authenticated()
@@ -74,11 +68,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/default")
                 .permitAll()
 
-                /*.and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/
-
-                /**test*/
                 .and()
                 .rememberMe()
                 .rememberMeParameter("travelAgency-remember-me")

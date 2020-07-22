@@ -12,10 +12,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @EqualsAndHashCode
-
 @Entity
 public class PersistentLogins {
-
 
     @Id
     private String series;

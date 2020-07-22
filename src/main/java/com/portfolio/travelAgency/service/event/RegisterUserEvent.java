@@ -4,9 +4,7 @@ import com.portfolio.travelAgency.entity.User;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
-
 @Getter
-
 public class RegisterUserEvent extends ApplicationEvent {
 
     private User user;

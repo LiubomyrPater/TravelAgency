@@ -1,6 +1,5 @@
 package com.portfolio.travelAgency.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +12,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-//@EqualsAndHashCode
-
-
 @Entity
 public class Booking {
 

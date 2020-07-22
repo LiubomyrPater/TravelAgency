@@ -81,7 +81,6 @@ public class ManagerController {
     }
 
 
-
     @GetMapping("/management/addRoom")
     public String addRoomToHotel(Model model) {
         model.addAttribute("addRoomForm", new RoomDTO());

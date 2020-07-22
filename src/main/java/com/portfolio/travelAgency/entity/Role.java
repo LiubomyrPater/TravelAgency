@@ -3,7 +3,6 @@ package com.portfolio.travelAgency.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -16,11 +15,8 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @EqualsAndHashCode
-//@ToString (of = {"name"})
-
 @Entity
 public class Role implements GrantedAuthority {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

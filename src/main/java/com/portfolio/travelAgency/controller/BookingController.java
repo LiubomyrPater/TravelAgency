@@ -3,8 +3,6 @@ package com.portfolio.travelAgency.controller;
 import com.portfolio.travelAgency.entity.Hotel;
 import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.entity.RoomType;
-import com.portfolio.travelAgency.repository.CityRepository;
-import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;

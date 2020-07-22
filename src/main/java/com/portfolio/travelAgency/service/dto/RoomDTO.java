@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 public class RoomDTO {
 
-
     private String number;
 
     private Integer price;

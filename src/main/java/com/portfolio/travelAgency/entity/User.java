@@ -1,7 +1,5 @@
 package com.portfolio.travelAgency.entity;
 
-
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,8 +14,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-//@EqualsAndHashCode
-
 @Entity
 public class User implements UserDetails {
 

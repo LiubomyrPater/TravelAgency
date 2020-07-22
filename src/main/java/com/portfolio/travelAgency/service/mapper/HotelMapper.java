@@ -10,23 +10,16 @@ import org.springframework.stereotype.Component;
 public class HotelMapper {
 
     public Hotel toEntity(HotelDTO hotelDTO) {
-
         Hotel result = new Hotel();
-
         result.setName(hotelDTO.getName());
         result.setRooms(hotelDTO.getRooms());
-
         return result;
     }
 
-
     public HotelDTO toDTO(Hotel hotel) {
-
         HotelDTO result = new HotelDTO();
-
         result.setName(hotel.getName());
         result.setRooms(hotel.getRooms());
-
         return result;
     }
 }
