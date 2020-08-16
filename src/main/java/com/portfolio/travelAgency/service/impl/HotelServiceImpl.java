@@ -4,9 +4,9 @@ import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.entity.City;
 import com.portfolio.travelAgency.entity.Hotel;
 import com.portfolio.travelAgency.entity.Room;
-import com.portfolio.travelAgency.repository.CityRepository;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.service.dto.HotelDTO;
+import com.portfolio.travelAgency.service.interfaces.CityService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.mapper.HotelMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,23 +24,35 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HotelServiceImpl implements HotelService {
 
+
     private final HotelMapper hotelMapper;
     private final HotelRepository hotelRepository;
-    private final CityRepository cityRepository;
+    private final CityService cityService;
+
+    @Override
+    public Hotel findByNameAndCity(String hotel, String city) {
+        return hotelRepository.findByNameAndCity(hotel, cityService.findByName(city))
+                .orElseThrow(() -> new EntityNotFoundException("Hotel was not found"));
+    }
+
+    @Override
+    public Hotel findByName(String name) {
+        return hotelRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + name + " was not found"));
+    }
 
     @Override
     @Transactional
     public void addHotelToCity(HotelDTO hotelDTO) {
         Hotel hotel = hotelMapper.toEntity(hotelDTO);
         hotelRepository.save(hotel);
-        Hotel persistedHotel = hotelRepository.findByName(hotelDTO.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + hotelDTO.getName() + " was not found"));
 
-        City persistedCity = cityRepository.findByName(hotelDTO.getCity())
-                .orElseThrow(() -> new EntityNotFoundException("City with name " + hotelDTO.getCity() + " was not found"));
+        Hotel persistedHotel = findByName(hotelDTO.getName());
+
+        City persistedCity = cityService.findByName(hotelDTO.getCity());
 
         persistedCity.getHotels().add(persistedHotel);
-        cityRepository.save(persistedCity);
+        cityService.save(persistedCity);
     }
 
     @Override
@@ -51,7 +63,7 @@ public class HotelServiceImpl implements HotelService {
         LocalDate today = LocalDate.now().minusDays(1);
 
 
-        List<Hotel> allHotelsByCity = hotelRepository.findByCity(cityRepository.findByName(city).get());
+        List<Hotel> allHotelsByCity = hotelRepository.findByCity(cityService.findByName(city));
 
         List<Hotel> freeHotels = new ArrayList<>();
 
@@ -79,5 +91,12 @@ public class HotelServiceImpl implements HotelService {
             }
         }
         return freeHotels.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> hotelsName() {
+        List<String> hotelName = new ArrayList<>();
+        hotelRepository.findAll().forEach(x -> hotelName.add(x.getName()));
+        return hotelName;
     }
 }

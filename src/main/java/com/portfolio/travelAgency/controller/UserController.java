@@ -5,6 +5,8 @@ import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.repository.*;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.impl.BookingServiceImpl;
+import com.portfolio.travelAgency.service.interfaces.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,34 +15,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Controller
+@AllArgsConstructor
 public class UserController {
 
-    private final BookingRepository bookingRepository;
-    private final CityRepository cityRepository;
-    private final HotelRepository hotelRepository;
-    private final RoomRepository roomRepository;
-    private final RoomTypeRepository roomTypeRepository;
-    private final UserRepository userRepository;
-    private final BookingServiceImpl bookingService;
     private final BookingValidator bookingValidator;
     private final RoleRepository roleRepository;
-
-    public UserController(BookingRepository bookingRepository, CityRepository cityRepository, HotelRepository hotelRepository, RoomRepository roomRepository, RoomTypeRepository roomTypeRepository, UserRepository userRepository, BookingServiceImpl bookingService, BookingValidator bookingValidator, RoleRepository roleRepository) {
-        this.bookingRepository = bookingRepository;
-        this.cityRepository = cityRepository;
-        this.hotelRepository = hotelRepository;
-        this.roomRepository = roomRepository;
-        this.roomTypeRepository = roomTypeRepository;
-        this.userRepository = userRepository;
-        this.bookingService = bookingService;
-        this.bookingValidator = bookingValidator;
-        this.roleRepository = roleRepository;
-    }
+    private final RoomTypeService roomTypeService;
+    private final RoomService roomService;
+    private final HotelService hotelService;
+    private final BookingServiceImpl bookingService;
+    private final CityService cityService;
+    private final UserService userService;
 
     @GetMapping("/home")
     public String getHomePage(Model model,
@@ -49,24 +38,19 @@ public class UserController {
 
         bookingDTO.setUser(principal.getName());
 
-        List<String> cityName = new ArrayList<>();
-        cityRepository.findAll().forEach(x-> cityName.add(x.getName()));
+        List<String> cityName = cityService.citiesName();
         model.addAttribute("cities",cityName);
 
-        List<String> hotelName = new ArrayList<>();
-        hotelRepository.findAll().forEach(x -> hotelName.add(x.getName()));
+        List<String> hotelName = hotelService.hotelsName();
         model.addAttribute("hotels", hotelName);
 
-        List<String> roomNumber = new ArrayList<>();
-        roomRepository.findAll().forEach(x -> roomNumber.add(x.getNumber()));
+        List<String> roomNumber = roomService.roomsName();
         model.addAttribute("rooms", roomNumber);
 
-        List<String> roomTypes = new ArrayList<>();
-        roomTypeRepository.findAll().forEach(x -> roomTypes.add(x.getName()));
+        List<String> roomTypes = roomTypeService.roomTypesName();
         model.addAttribute("roomTypes", roomTypes);
 
-        List<String> users = new ArrayList<>();
-        userRepository.findAll().forEach(x -> users.add(x.getEmail()));
+        List<String> users = userService.usersName();
         model.addAttribute("users", users);
 
         return "home";
@@ -84,8 +68,7 @@ public class UserController {
 
         bookingService.createNewBooking(bookingDTO);
 
-        if (userRepository.findByEmail(principal.getName())
-                .get()
+        if (userService.findByEmail(principal.getName())
                 .getRole()
                 .contains(roleRepository.findByName("ROLE_MANAGER"))
                 ){
@@ -100,7 +83,7 @@ public class UserController {
     @GetMapping("/home/bookings")
     public String userBookings (Model model, Principal principal){
 
-        Set<Booking> bookings = bookingRepository.findUserBookingsByEmail(principal.getName());
+        Set<Booking> bookings = bookingService.findUserBookingsByEmail(principal.getName());
         model.addAttribute("bookings", bookings);
         return "bookings";
     }

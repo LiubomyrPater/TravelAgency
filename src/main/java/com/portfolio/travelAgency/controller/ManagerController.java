@@ -7,9 +7,12 @@ import com.portfolio.travelAgency.repository.*;
 import com.portfolio.travelAgency.service.dto.HotelDTO;
 import com.portfolio.travelAgency.service.dto.RoomDTO;
 import com.portfolio.travelAgency.service.dto.UserDTO;
+import com.portfolio.travelAgency.service.interfaces.CityService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
+import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
 import com.portfolio.travelAgency.service.mapper.UserMapper;
+import lombok.AllArgsConstructor;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,33 +26,21 @@ import java.util.Set;
 
 
 @Controller
+@AllArgsConstructor
 public class ManagerController {
 
-    private final CityRepository cityRepository;
     private final AddHotelValidator addHotelValidator;
-    private final HotelService hotelService;
-    private final HotelRepository hotelRepository;
-    private final RoomTypeRepository roomTypeRepository;
     private final AddRoomValidator addRoomValidator;
-    private final RoomService roomService;
+
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final BookingRepository bookingRepository;
+    private final HotelRepository hotelRepository;
 
-
-    public ManagerController(CityRepository cityRepository, AddHotelValidator addHotelValidator, HotelService hotelService, HotelRepository hotelRepository, RoomTypeRepository roomTypeRepository, AddRoomValidator addRoomValidator, RoomService roomService, UserRepository userRepository, UserMapper userMapper, BookingRepository bookingRepository) {
-        this.cityRepository = cityRepository;
-        this.addHotelValidator = addHotelValidator;
-        this.hotelService = hotelService;
-        this.hotelRepository = hotelRepository;
-        this.roomTypeRepository = roomTypeRepository;
-        this.addRoomValidator = addRoomValidator;
-        this.roomService = roomService;
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.bookingRepository = bookingRepository;
-    }
-
+    private final HotelService hotelService;
+    private final RoomTypeService roomTypeService;
+    private final RoomService roomService;
+    private final UserMapper userMapper;
+    private final CityService cityService;
 
     @GetMapping("/management")
     public String managementPage() {
@@ -60,20 +51,18 @@ public class ManagerController {
     @GetMapping("/management/addHotel")
     public String addHotelToCity(Model model) {
         model.addAttribute("addHotelForm", new HotelDTO());
-        //List<City> cities = cityRepository.findAllBy();
-        List<City> cities = cityRepository.findAll();
-        List<String> cityName = new ArrayList<>();
-        cities.forEach(x-> cityName.add(x.getName()));
+        List<String> cityName = cityService.citiesName();
         model.addAttribute("cities",cityName);
-
         return "addHotel";
     }
 
     @PostMapping("/management/addHotel")
     public String addHotelToCity(@ModelAttribute("addHotelForm") HotelDTO hotelDTO,
-                               BindingResult bindingResult) {
+                               BindingResult bindingResult, Model model) {
         addHotelValidator.validate(hotelDTO, bindingResult);
         if (bindingResult.hasErrors()) {
+            List<String> cityName = cityService.citiesName();
+            model.addAttribute("cities",cityName);
             return "addHotel";
         }
         hotelService.addHotelToCity(hotelDTO);
@@ -83,16 +72,13 @@ public class ManagerController {
 
     @GetMapping("/management/addRoom")
     public String addRoomToHotel(Model model) {
+
         model.addAttribute("addRoomForm", new RoomDTO());
 
-        List<City> cities = cityRepository.findAll();
-        List<String> cityName = new ArrayList<>();
-        cities.forEach(x-> cityName.add(x.getName()));
+        List<String> cityName = cityService.citiesName();
         model.addAttribute("cities",cityName);
 
-        List<RoomType> roomTypes = roomTypeRepository.findAll();
-        List<String> roomTypeName = new ArrayList<>();
-        roomTypes.forEach(x -> roomTypeName.add(x.getName()));
+        List<String> roomTypeName = roomTypeService.roomTypesName();
         model.addAttribute("types", roomTypeName);
 
         return "addRoom";
@@ -132,7 +118,7 @@ public class ManagerController {
     public String getHotelsInCity(@RequestParam String city){
 
         JSONArray jsonArrayHotels = new JSONArray();
-        List<Hotel> hotels = hotelRepository.findByCity(cityRepository.findByName(city).get());
+        List<Hotel> hotels = hotelRepository.findByCity(cityService.findByName(city));
         for (Hotel h: hotels) {
             JSONObject jsonObjectHotel = new JSONObject();
             jsonObjectHotel.put("name", h.getName());

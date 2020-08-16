@@ -7,6 +7,7 @@ import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
+import lombok.AllArgsConstructor;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -17,20 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class BookingController {
 
     private final BookingService bookingService;
     private final HotelService hotelService;
     private final RoomTypeService roomTypeService;
     private final RoomService roomService;
-
-    public BookingController(BookingService bookingService, HotelService hotelService, RoomTypeService roomTypeService, RoomService roomService) {
-        this.bookingService = bookingService;
-        this.hotelService = hotelService;
-        this.roomTypeService = roomTypeService;
-        this.roomService = roomService;
-    }
-
 
     @GetMapping("/home/dateArrivalSelect")
     @ResponseBody

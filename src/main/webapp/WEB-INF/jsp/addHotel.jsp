@@ -25,7 +25,7 @@
                     <form:options items="${cities}" />
                 </form:select>
 
-                <form:errors path="city"></form:errors>
+                <%--<form:errors path="city"></form:errors>--%>
             </div>
         </spring:bind>
 

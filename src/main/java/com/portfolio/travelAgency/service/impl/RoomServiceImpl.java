@@ -1,12 +1,12 @@
 package com.portfolio.travelAgency.service.impl;
 
 import com.portfolio.travelAgency.entity.*;
-import com.portfolio.travelAgency.repository.CityRepository;
-import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
-import com.portfolio.travelAgency.repository.RoomTypeRepository;
+
 import com.portfolio.travelAgency.service.dto.RoomDTO;
+import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
+import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
 import com.portfolio.travelAgency.service.mapper.RoomMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
+
+
     private final RoomMapper roomMapper;
     private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
-    private final CityRepository cityRepository;
-    private final RoomTypeRepository roomTypeRepository;
+    private final RoomTypeService roomTypeService;
+    private final HotelService hotelService;
 
     @Override
     @Transactional
@@ -43,8 +44,8 @@ public class RoomServiceImpl implements RoomService {
         LocalDate departureDate = LocalDate.parse(departure);
         LocalDate today = LocalDate.now().minusDays(1);
 
-        Hotel persistedHotel = hotelRepository.findByNameAndCity(hotel, cityRepository.findByName(city).get()).get();
-        RoomType roomType = roomTypeRepository.findByName(typeRoom).get();
+        Hotel persistedHotel = hotelService.findByNameAndCity(hotel, city);
+        RoomType roomType = roomTypeService.findByName(typeRoom);
 
         Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
 
@@ -71,5 +72,12 @@ public class RoomServiceImpl implements RoomService {
             }
         }
         return freeRoomsList.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> roomsName() {
+        List<String> roomNumber = new ArrayList<>();
+        roomRepository.findAll().forEach(x -> roomNumber.add(x.getNumber()));
+        return roomNumber;
     }
 }

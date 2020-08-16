@@ -1,5 +1,6 @@
 package com.portfolio.travelAgency.service.impl;
 
+import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.repository.BookingRepository;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,11 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
+
+    @Override
+    public Set<Booking> findUserBookingsByEmail(String email) {
+        return bookingRepository.findUserBookingsByEmail(email);
+    }
 
     @Override
     public void createNewBooking(BookingDTO bookingDTO) {

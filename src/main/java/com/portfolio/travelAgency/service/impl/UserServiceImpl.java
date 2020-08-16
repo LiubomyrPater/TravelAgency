@@ -13,8 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,27 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final VerificationTokenRepository verificationTokenRepository;
+    private final UserRepository userRepository;
+
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " was not found"));
+
+
+    }
+
+    @Override
+    public List<String> usersName() {
+        List<String> users = new ArrayList<>();
+        userRepository.findAll().forEach(x -> users.add(x.getEmail()));
+        return users;
+    }
+
+
+
 
     @Override
     public User registerNewUser(UserDTO userDTO) {
@@ -39,8 +63,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private final VerificationTokenRepository verificationTokenRepository;
-    private final UserRepository userRepository;
+
 
     @Override
     public void confirmRegistration(String token) {

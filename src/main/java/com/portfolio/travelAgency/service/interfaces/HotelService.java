@@ -10,4 +10,10 @@ public interface HotelService {
     void addHotelToCity(HotelDTO hotelDTO);
 
     List<Hotel> findFreeHotels(String city, String arrival, String departure);
+
+    List<String> hotelsName();
+
+    Hotel findByName(String name);
+
+    Hotel findByNameAndCity(String hotel, String city);
 }

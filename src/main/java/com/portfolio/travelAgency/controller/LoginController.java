@@ -3,10 +3,10 @@ package com.portfolio.travelAgency.controller;
 import com.portfolio.travelAgency.controller.validator.UserValidator;
 import com.portfolio.travelAgency.entity.User;
 import com.portfolio.travelAgency.repository.RoleRepository;
-import com.portfolio.travelAgency.repository.UserRepository;
 import com.portfolio.travelAgency.service.dto.UserDTO;
 import com.portfolio.travelAgency.service.event.RegisterUserEvent;
 import com.portfolio.travelAgency.service.interfaces.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,29 +20,20 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
+@AllArgsConstructor
 public class LoginController {
 
-
-    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+
     private final UserService userService;
     private final UserValidator userValidator;
     private final ApplicationEventPublisher eventPublisher;
-
-    public LoginController(UserRepository userRepository, RoleRepository roleRepository, UserService userService, UserValidator userValidator, ApplicationEventPublisher eventPublisher) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.userService = userService;
-        this.userValidator = userValidator;
-        this.eventPublisher = eventPublisher;
-    }
 
     @GetMapping
     public String basePage(Principal principal)
     {
         if(principal != null){
-            if (userRepository.findByEmail(principal.getName())
-                    .get()
+            if (userService.findByEmail(principal.getName())
                     .getRole()
                     .contains(roleRepository.findByName("ROLE_ADMIN"))
                     )
@@ -76,8 +67,7 @@ public class LoginController {
 
     @GetMapping("/default")
     public String getDefaultPage(Principal principal) {
-        if (userRepository.findByEmail(principal.getName())
-                .get()
+        if (userService.findByEmail(principal.getName())
                 .getRole()
                 .contains(roleRepository.findByName("ROLE_ADMIN"))
                 )
