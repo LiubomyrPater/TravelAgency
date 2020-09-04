@@ -61,7 +61,7 @@ public class BookingController {
 
     @GetMapping("/home/hotelSelectForm")
     @ResponseBody
-    public String getType(@RequestParam String arrival,
+    public String getHotel(@RequestParam String arrival,
                           @RequestParam String departure,
                           @RequestParam String city,
                           @RequestParam String hotel){
@@ -93,5 +93,30 @@ public class BookingController {
             jsonArrayRoom.add(jsonObject);
         }
         return jsonArrayRoom.toString();
+    }
+
+
+
+    @GetMapping("/home/roomSelectForm")
+    @ResponseBody
+    public String getRoom(@RequestParam String arrival,
+                          @RequestParam String departure,
+                          @RequestParam String city,
+                          @RequestParam String hotel,
+                          @RequestParam String type,
+                          @RequestParam String room){
+
+        JSONArray jsonArrayRoomAvailable = new JSONArray();
+
+        JSONObject earlyArrival = new JSONObject();
+        earlyArrival.put("earlyArrival", roomService.earlyArrival(city, arrival, departure, hotel, type, room));
+
+        JSONObject lateDeparture = new JSONObject();
+        lateDeparture.put("lateDeparture", roomService.lateDeparture(city, arrival, departure, hotel, type, room));
+
+        jsonArrayRoomAvailable.add(earlyArrival);
+        jsonArrayRoomAvailable.add(lateDeparture);
+
+        return jsonArrayRoomAvailable.toString();
     }
 }

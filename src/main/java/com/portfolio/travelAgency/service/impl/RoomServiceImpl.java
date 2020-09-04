@@ -74,6 +74,21 @@ public class RoomServiceImpl implements RoomService {
         return freeRoomsList.stream().distinct().collect(Collectors.toList());
     }
 
+
+    @Override
+    public boolean earlyArrival(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
+
+
+
+        return true;
+    }
+
+
+    @Override
+    public boolean lateDeparture(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
+        return true;
+    }
+
     @Override
     public List<String> roomsName() {
         List<String> roomNumber = new ArrayList<>();

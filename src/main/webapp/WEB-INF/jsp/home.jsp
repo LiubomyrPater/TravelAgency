@@ -218,20 +218,29 @@
         <script>
             function room_select() {
                 $('#reserveButton').removeAttr('disabled');
-
-
-
-
-
-
-
+                $.ajax({
+                    url: "home/roomSelectForm?hotel=" + $("#selectHotel option:selected").val()
+                    + "&city=" + $("#selectCity option:selected").val()
+                    + "&arrival=" + $("#dateArrival").val()
+                    + "&departure=" + $("#dateDeparture").val()
+                    + "&type=" + $("#selectType option:selected").val()
+                    + "&room=" + $("#selectRoom option:selected").val(),
+                    success: function(result){
+                        if (((JSON.parse(result))[0]).earlyArrival){
+                            $('#earlyArrival').removeAttr('disabled');
+                        }
+                        if (((JSON.parse(result))[1]).lateDeparture){
+                            $('#lateDeparture').removeAttr('disabled');
+                        }
+                    }
+                });
             }
         </script>
         <div class="row">
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="earlyArrival">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:checkbox path="earlyArrival" class="form-control" disabled="true" label="Early arrival"></form:checkbox>
+                        <form:checkbox path="earlyArrival" class="form-control" disabled="true" id="earlyArrival" label="Early arrival"></form:checkbox>
                         <form:errors path="earlyArrival"></form:errors>
                     </div>
                 </spring:bind>
@@ -239,7 +248,7 @@
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="lateDeparture">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:checkbox path="lateDeparture" class="form-control" disabled="true" label="Late departure"></form:checkbox>
+                        <form:checkbox path="lateDeparture" class="form-control" disabled="true" id="lateDeparture" label="Late departure"></form:checkbox>
                         <form:errors path="lateDeparture"></form:errors>
                     </div>
                 </spring:bind>
