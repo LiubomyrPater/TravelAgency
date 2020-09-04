@@ -78,8 +78,8 @@ public class HotelServiceImpl implements HotelService {
                     freeHotels.add(h);
                 }else {
                     for (Booking b: bookings) {
-                        if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || departureDate.isEqual(b.getArrival())))
-                                || ((arrivalDate.isEqual(b.getDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
+                        if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival())))
+                                || (((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
                             freeRoms = true;
                         }else
                             freeRoms = false;
