@@ -45,6 +45,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         boolean freeRoom = false;
 
         List<RoomType> roomTypes = new ArrayList<>();
+
         for (Room r: rooms) {
             Set<Booking> bookings = r.getBookings();
             bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
@@ -52,16 +53,11 @@ public class RoomTypeServiceImpl implements RoomTypeService {
                 roomTypes.add(r.getType());
             }else {
                 for (Booking b: bookings) {
-                    if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival())))
-                            || (((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
-                        freeRoom = true;
-                    }else {
-                        freeRoom = false;
-                    }
+                    freeRoom = (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival()))
+                            || ((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture());
                 }
-                if (freeRoom){
+                if (freeRoom)
                     roomTypes.add(r.getType());
-                }
             }
         }
         return roomTypes.stream().distinct().collect(Collectors.toList());

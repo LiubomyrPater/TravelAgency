@@ -77,16 +77,21 @@ public class HotelServiceImpl implements HotelService {
                 if (bookings.size() == 0){
                     freeHotels.add(h);
                 }else {
+                    long size = bookings.stream()
+                            .filter(x -> ((arrivalDate.isEqual(x.getDeparture()) && x.isLateDeparture()) || !arrivalDate.isAfter(x.getDeparture())))
+                            .filter(x -> (!departureDate.isBefore(x.getArrival()) || (departureDate.isEqual(x.getArrival()) && x.isEarlyArrival())))
+                            .count();
+
+                    if (size == 0)
+                        freeHotels.add(h);
+/*
                     for (Booking b: bookings) {
-                        if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival())))
-                                || (((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
-                            freeRoms = true;
-                        }else
-                            freeRoms = false;
+                        freeRoms = (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival()))
+                                || ((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture()));
                     }
                     if (freeRoms){
                         freeHotels.add(h);
-                    }
+                    }*/
                 }
             }
         }

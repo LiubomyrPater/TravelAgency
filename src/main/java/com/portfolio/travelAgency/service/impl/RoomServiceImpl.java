@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,11 +48,11 @@ public class RoomServiceImpl implements RoomService {
         Hotel persistedHotel = hotelService.findByNameAndCity(hotel, city);
         RoomType roomType = roomTypeService.findByName(typeRoom);
 
-        Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
-
         boolean freeRoms = false;
 
         List<Room> freeRoomsList = new ArrayList<>();
+
+        Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
         for (Room r: rooms) {
             Set<Booking> bookings = r.getBookings();
             bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
@@ -59,16 +60,11 @@ public class RoomServiceImpl implements RoomService {
                 freeRoomsList.add(r);
             }else {
                 for (Booking b: bookings) {
-                    if ((arrivalDate.isBefore(b.getArrival()) & (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival())))
-                            || (((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture())) & departureDate.isAfter(b.getDeparture()))){
-                        freeRoms = true;
-                    }else {
-                        freeRoms = false;
-                    }
+                    freeRoms = (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival()))
+                            || ((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture()));
                 }
-                if (freeRoms){
+                if (freeRoms)
                     freeRoomsList.add(r);
-                }
             }
         }
         return freeRoomsList.stream().distinct().collect(Collectors.toList());
@@ -77,9 +73,13 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean earlyArrival(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
-
-
-
+/*
+        Room selectedRoom = findByCityDateHotelType(city, arrival, departure, hotel, typeRoom)
+                .stream()
+                .filter(x -> x.getNumber().equals(room))
+                .findFirst()
+                .get();
+                */
         return true;
     }
 

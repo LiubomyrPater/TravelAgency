@@ -32,9 +32,7 @@ public class BookingServiceImpl implements BookingService {
     public boolean matchDateArrival(String date) {
         LocalDate choseDate = LocalDate.parse(date);
 
-        if (choseDate.isBefore(LocalDate.now())){
-            return false;
-        }else return true;
+        return !choseDate.isBefore(LocalDate.now());
     }
 
     @Override
@@ -43,9 +41,7 @@ public class BookingServiceImpl implements BookingService {
         LocalDate arrival = LocalDate.parse(dateArrival);
         LocalDate departure = LocalDate.parse(dateDeparture);
 
-        if (departure.isBefore(arrival) || departure.isBefore(LocalDate.now())
-                || departure.isEqual(arrival) || departure.isEqual(LocalDate.now())){
-            return false;
-        }else return true;
+        return !departure.isBefore(arrival) && !departure.isBefore(LocalDate.now())
+                && !departure.isEqual(arrival) && !departure.isEqual(LocalDate.now());
     }
 }
