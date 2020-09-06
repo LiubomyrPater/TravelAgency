@@ -6,6 +6,7 @@ import com.portfolio.travelAgency.entity.Hotel;
 import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.service.dto.HotelDTO;
+import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.CityService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.mapper.HotelMapper;
@@ -28,6 +29,7 @@ public class HotelServiceImpl implements HotelService {
     private final HotelMapper hotelMapper;
     private final HotelRepository hotelRepository;
     private final CityService cityService;
+    private final BookingService bookingService;
 
     @Override
     public Hotel findByNameAndCity(String hotel, String city) {
@@ -58,43 +60,20 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<Hotel> findFreeHotels(String city, String arrival, String departure) {
 
-        LocalDate arrivalDate = LocalDate.parse(arrival);
+        /*LocalDate arrivalDate = LocalDate.parse(arrival);
         LocalDate departureDate = LocalDate.parse(departure);
-        LocalDate today = LocalDate.now().minusDays(1);
+        LocalDate today = LocalDate.now().minusDays(1);*/
 
 
         List<Hotel> allHotelsByCity = hotelRepository.findByCity(cityService.findByName(city));
 
         List<Hotel> freeHotels = new ArrayList<>();
 
-        boolean freeRoms = false;
 
-        for (Hotel h: allHotelsByCity) {
-            Set<Room> rooms = h.getRooms();
-            for (Room r: rooms) {
-                Set<Booking> bookings = r.getBookings();
-                bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
-                if (bookings.size() == 0){
-                    freeHotels.add(h);
-                }else {
-                    long size = bookings.stream()
-                            .filter(x -> ((arrivalDate.isEqual(x.getDeparture()) && x.isLateDeparture()) || !arrivalDate.isAfter(x.getDeparture())))
-                            .filter(x -> (!departureDate.isBefore(x.getArrival()) || (departureDate.isEqual(x.getArrival()) && x.isEarlyArrival())))
-                            .count();
-
-                    if (size == 0)
-                        freeHotels.add(h);
-/*
-                    for (Booking b: bookings) {
-                        freeRoms = (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival()))
-                                || ((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture()));
-                    }
-                    if (freeRoms){
-                        freeHotels.add(h);
-                    }*/
-                }
-            }
-        }
+        allHotelsByCity.forEach(h -> h.getRooms().stream()
+                .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
+                .map(r -> h)
+                .forEach(freeHotels::add));
         return freeHotels.stream().distinct().collect(Collectors.toList());
     }
 

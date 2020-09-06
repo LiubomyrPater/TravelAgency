@@ -4,6 +4,7 @@ import com.portfolio.travelAgency.entity.*;
 import com.portfolio.travelAgency.repository.RoomRepository;
 
 import com.portfolio.travelAgency.service.dto.RoomDTO;
+import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
@@ -12,11 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +28,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final RoomTypeService roomTypeService;
     private final HotelService hotelService;
+    private final BookingService bookingService;
 
     @Override
     @Transactional
@@ -40,32 +40,15 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<Room> findByCityDateHotelType(String city, String arrival, String departure, String hotel, String typeRoom) {
 
-
-        LocalDate arrivalDate = LocalDate.parse(arrival);
-        LocalDate departureDate = LocalDate.parse(departure);
-        LocalDate today = LocalDate.now().minusDays(1);
-
         Hotel persistedHotel = hotelService.findByNameAndCity(hotel, city);
         RoomType roomType = roomTypeService.findByName(typeRoom);
-
-        boolean freeRoms = false;
 
         List<Room> freeRoomsList = new ArrayList<>();
 
         Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
         for (Room r: rooms) {
-            Set<Booking> bookings = r.getBookings();
-            bookings = bookings.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
-            if (bookings.size() == 0){
+            if (bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
                 freeRoomsList.add(r);
-            }else {
-                for (Booking b: bookings) {
-                    freeRoms = (departureDate.isBefore(b.getArrival()) || (departureDate.isEqual(b.getArrival()) & !b.isEarlyArrival()))
-                            || ((arrivalDate.isEqual(b.getDeparture()) & !b.isLateDeparture()) || arrivalDate.isAfter(b.getDeparture()));
-                }
-                if (freeRoms)
-                    freeRoomsList.add(r);
-            }
         }
         return freeRoomsList.stream().distinct().collect(Collectors.toList());
     }
