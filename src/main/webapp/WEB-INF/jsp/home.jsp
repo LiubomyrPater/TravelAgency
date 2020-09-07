@@ -104,7 +104,7 @@
             </div>
             <script>
                 function dateDepartureSelect() {
-                    $('#selectHotel').removeAttr('disabled');
+
                     $.ajax({
                         url: "home/dateDepartureSelect?arrival=" + $("#dateArrival").val()
                         + "&departure=" + $("#dateDeparture").val()
@@ -115,6 +115,8 @@
                                 if(!value){
                                     alert("Wrong date. Before arrival or before today");
                                 }else {
+
+                                    $('#selectHotel').removeAttr('disabled');
                                     createDropDownHotel(value.name);
                                 }
                             });

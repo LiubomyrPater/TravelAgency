@@ -109,10 +109,10 @@ public class BookingController {
         JSONArray jsonArrayRoomAvailable = new JSONArray();
 
         JSONObject earlyArrival = new JSONObject();
-        earlyArrival.put("earlyArrival", roomService.earlyArrival(city, arrival, departure, hotel, type, room));
+        earlyArrival.put("earlyArrival", roomService.earlyArrival(city, arrival, hotel, room));
 
         JSONObject lateDeparture = new JSONObject();
-        lateDeparture.put("lateDeparture", roomService.lateDeparture(city, arrival, departure, hotel, type, room));
+        lateDeparture.put("lateDeparture", roomService.lateDeparture(city, departure, hotel, room));
 
         jsonArrayRoomAvailable.add(earlyArrival);
         jsonArrayRoomAvailable.add(lateDeparture);

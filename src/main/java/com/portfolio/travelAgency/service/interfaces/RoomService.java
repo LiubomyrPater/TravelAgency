@@ -11,9 +11,9 @@ public interface RoomService {
 
     List<Room> findByCityDateHotelType(String city, String arrival, String departure, String hotel, String typeRoom);
 
-    boolean earlyArrival(String city, String arrival, String departure, String hotel, String typeRoom, String room);
+    boolean earlyArrival(String city, String arrival, String hotel, String room);
 
-    boolean lateDeparture (String city, String arrival, String departure, String hotel, String typeRoom, String room);
+    boolean lateDeparture (String city, String departure, String hotel, String room);
 
     List<String> roomsName();
 }

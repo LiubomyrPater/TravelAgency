@@ -30,9 +30,19 @@ public class BookingServiceImpl implements BookingService {
         if (bookingSet.size() == 0){
             return  true;
         }else {
-            return (bookingSet.stream()
-                    .filter(x -> ((arrivalDate.isEqual(x.getDeparture()) && x.isLateDeparture()) || !arrivalDate.isAfter(x.getDeparture())))
-                    .noneMatch(x -> (!departureDate.isBefore(x.getArrival()) || (departureDate.isEqual(x.getArrival()) && x.isEarlyArrival()))));
+             return bookingSet.stream().noneMatch(x -> (
+                     (arrivalDate.isEqual(x.getDeparture()) && x.isLateDeparture())
+                             || (departureDate.isEqual(x.getArrival()) && x.isEarlyArrival())
+                             || (arrivalDate.isBefore(x.getDeparture()) && arrivalDate.isAfter(x.getArrival()))
+                             || ((departureDate.isAfter(x.getArrival())) && departureDate.isBefore(x.getDeparture()))
+                             || (arrivalDate.isEqual(x.getArrival()) && departureDate.isEqual(x.getDeparture()))
+                             || (arrivalDate.isBefore(x.getArrival()) && departureDate.isAfter(x.getDeparture()))
+                             || (arrivalDate.isAfter(x.getArrival()) && departureDate.isBefore(x.getDeparture()))
+                             || (arrivalDate.isAfter(x.getArrival()) && departureDate.isEqual(x.getDeparture()))
+                             || (arrivalDate.isEqual(x.getArrival()) && departureDate.isBefore(x.getDeparture()))
+                             || (arrivalDate.isBefore(x.getArrival()) && departureDate.isEqual(x.getDeparture()))
+                             || (arrivalDate.isEqual(x.getArrival()) && departureDate.isAfter(x.getDeparture()))
+             ));
         }
     }
 

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -50,17 +51,29 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public boolean earlyArrival(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
+    public boolean earlyArrival(String city, String arrival, String hotel, String room) {
 
-
-        return true;
+        return hotelService.findByNameAndCity(hotel, city).getRooms().stream()
+                .filter(r -> r.getNumber().equals(room))
+                .findFirst()
+                .get()
+                .getBookings()
+                .stream()
+                .filter(b -> !b.getDeparture().isBefore(LocalDate.now()))
+                .noneMatch(b -> b.getDeparture().isEqual(LocalDate.parse(arrival)));
     }
 
     @Override
-    public boolean lateDeparture(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
+    public boolean lateDeparture(String city, String departure, String hotel, String room) {
 
-
-        return true;
+        return hotelService.findByNameAndCity(hotel, city).getRooms().stream()
+                .filter(r -> r.getNumber().equals(room))
+                .findFirst()
+                .get()
+                .getBookings()
+                .stream()
+                .filter(b -> !b.getDeparture().isBefore(LocalDate.now()))
+                .noneMatch(b -> b.getArrival().isEqual(LocalDate.parse(departure)));
     }
 
     @Override
