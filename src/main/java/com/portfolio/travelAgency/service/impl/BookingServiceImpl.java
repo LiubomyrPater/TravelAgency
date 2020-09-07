@@ -1,7 +1,6 @@
 package com.portfolio.travelAgency.service.impl;
 
 import com.portfolio.travelAgency.entity.Booking;
-import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.repository.BookingRepository;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
@@ -31,12 +30,9 @@ public class BookingServiceImpl implements BookingService {
         if (bookingSet.size() == 0){
             return  true;
         }else {
-            long size = bookingSet.stream()
+            return (bookingSet.stream()
                     .filter(x -> ((arrivalDate.isEqual(x.getDeparture()) && x.isLateDeparture()) || !arrivalDate.isAfter(x.getDeparture())))
-                    .filter(x -> (!departureDate.isBefore(x.getArrival()) || (departureDate.isEqual(x.getArrival()) && x.isEarlyArrival())))
-                    .count();
-
-            return (size == 0);
+                    .noneMatch(x -> (!departureDate.isBefore(x.getArrival()) || (departureDate.isEqual(x.getArrival()) && x.isEarlyArrival()))));
         }
     }
 

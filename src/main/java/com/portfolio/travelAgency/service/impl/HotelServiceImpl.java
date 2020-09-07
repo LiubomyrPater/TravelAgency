@@ -1,9 +1,7 @@
 package com.portfolio.travelAgency.service.impl;
 
-import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.entity.City;
 import com.portfolio.travelAgency.entity.Hotel;
-import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.service.dto.HotelDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
@@ -15,10 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,20 +56,15 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<Hotel> findFreeHotels(String city, String arrival, String departure) {
 
-        /*LocalDate arrivalDate = LocalDate.parse(arrival);
-        LocalDate departureDate = LocalDate.parse(departure);
-        LocalDate today = LocalDate.now().minusDays(1);*/
-
-
         List<Hotel> allHotelsByCity = hotelRepository.findByCity(cityService.findByName(city));
 
         List<Hotel> freeHotels = new ArrayList<>();
-
 
         allHotelsByCity.forEach(h -> h.getRooms().stream()
                 .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
                 .map(r -> h)
                 .forEach(freeHotels::add));
+
         return freeHotels.stream().distinct().collect(Collectors.toList());
     }
 

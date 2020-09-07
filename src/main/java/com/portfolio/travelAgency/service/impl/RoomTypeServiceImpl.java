@@ -38,13 +38,10 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         Hotel persistedHotel = hotelRepository.findByNameAndCity(hotel, cityService.findByName(city)).get();
         Set<Room> rooms = persistedHotel.getRooms();
 
+        List<RoomType> roomTypes = rooms.stream()
+                .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
+                .map(Room::getType).collect(Collectors.toList());
 
-        List<RoomType> roomTypes = new ArrayList<>();
-
-        for (Room r: rooms) {
-            if (bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
-                roomTypes.add(r.getType());
-        }
         return roomTypes.stream().distinct().collect(Collectors.toList());
     }
 

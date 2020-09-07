@@ -2,7 +2,6 @@ package com.portfolio.travelAgency.service.impl;
 
 import com.portfolio.travelAgency.entity.*;
 import com.portfolio.travelAgency.repository.RoomRepository;
-
 import com.portfolio.travelAgency.service.dto.RoomDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
@@ -21,8 +20,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
-
-
 
     private final RoomMapper roomMapper;
     private final RoomRepository roomRepository;
@@ -43,32 +40,26 @@ public class RoomServiceImpl implements RoomService {
         Hotel persistedHotel = hotelService.findByNameAndCity(hotel, city);
         RoomType roomType = roomTypeService.findByName(typeRoom);
 
-        List<Room> freeRoomsList = new ArrayList<>();
-
         Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
-        for (Room r: rooms) {
-            if (bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
-                freeRoomsList.add(r);
-        }
+
+        List<Room> freeRoomsList = rooms.stream()
+                .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
+                .collect(Collectors.toList());
+
         return freeRoomsList.stream().distinct().collect(Collectors.toList());
     }
 
-
     @Override
     public boolean earlyArrival(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
-/*
-        Room selectedRoom = findByCityDateHotelType(city, arrival, departure, hotel, typeRoom)
-                .stream()
-                .filter(x -> x.getNumber().equals(room))
-                .findFirst()
-                .get();
-                */
+
+
         return true;
     }
 
-
     @Override
     public boolean lateDeparture(String city, String arrival, String departure, String hotel, String typeRoom, String room) {
+
+
         return true;
     }
 
