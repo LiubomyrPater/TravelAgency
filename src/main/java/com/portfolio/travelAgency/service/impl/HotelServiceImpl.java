@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,29 +29,55 @@ public class HotelServiceImpl implements HotelService {
     private final BookingService bookingService;
 
     @Override
+    public List<String> findByCity(String city) {
+        return hotelRepository.findByCity(cityService.findByName(city))
+                .stream()
+                .map(Hotel::getName)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public Hotel findByID(Long id) {
+        return hotelRepository.findById(id).get();
+    }
+
+    @Override
+    public List<HotelDTO> findAllDTO() {
+        return hotelRepository.findAll()
+                .stream()
+                .map(hotelMapper::toDTO)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public List<Hotel> findAll() {
+        return hotelRepository.findAll();
+    }
+
+    @Override
     public Hotel findByNameAndCity(String hotel, String city) {
         return hotelRepository.findByNameAndCity(hotel, cityService.findByName(city))
                 .orElseThrow(() -> new EntityNotFoundException("Hotel was not found"));
     }
 
-    @Override
+    /*@Override
     public Hotel findByName(String name) {
         return hotelRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + name + " was not found"));
-    }
+    }*/
 
     @Override
     @Transactional
     public void addHotelToCity(HotelDTO hotelDTO) {
         Hotel hotel = hotelMapper.toEntity(hotelDTO);
         hotelRepository.save(hotel);
-
+/*
         Hotel persistedHotel = findByName(hotelDTO.getName());
 
         City persistedCity = cityService.findByName(hotelDTO.getCity());
 
         persistedCity.getHotels().add(persistedHotel);
-        cityService.save(persistedCity);
+        cityService.save(persistedCity);*/
     }
 
     @Override

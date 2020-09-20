@@ -28,7 +28,7 @@ public class UserDTO {
 
     private boolean enabled;
 
-    private Set<Booking> bookings = new HashSet<>();
+   // private Set<Booking> bookings = new HashSet<>();
 
     private Set<Role> role = new HashSet<>();
 

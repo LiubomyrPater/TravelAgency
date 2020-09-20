@@ -28,12 +28,13 @@ public class BookingMapper {
         result.setArrival(LocalDate.parse(bookingDTO.getArrival()));
         result.setDeparture(LocalDate.parse(bookingDTO.getDeparture()));
         result.setCreateMoment(LocalDateTime.now());
+        result.setPrice(bookingDTO.getPrice());
         result.setEarlyArrival(bookingDTO.isEarlyArrival());
         result.setLateDeparture(bookingDTO.isLateDeparture());
         result.setUser(userRepository.findByEmail(bookingDTO.getUser()).get());
         result.setRoom(roomRepository.findByNumberAndHotel(bookingDTO.getRoom(),
                 hotelRepository.findByNameAndCity(bookingDTO.getHotel(),
-                        cityRepository.findByName(bookingDTO.getCity()).get()).get()));
+                        cityRepository.findByName(bookingDTO.getCity()).get()).get()).get());
 
         return result;
     }

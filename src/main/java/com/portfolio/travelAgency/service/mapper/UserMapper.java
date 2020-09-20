@@ -18,7 +18,7 @@ public class UserMapper {
         result.setPassword(userDTO.getPassword());
         result.setEmail(userDTO.getEmail());
         result.setPhoneNumber(userDTO.getPhoneNumber());
-        result.setRole(userDTO.getRole());
+       // result.setRole(userDTO.getRole());
 
         return result;
     }

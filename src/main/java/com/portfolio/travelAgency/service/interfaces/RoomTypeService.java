@@ -10,5 +10,7 @@ public interface RoomTypeService {
 
     List<String> roomTypesName();
 
-    RoomType findByName(String name);
+    RoomType findByNameAndHotelAndCity(String name, String hotel, String city);
+
+    List<String> findTypesByCityAndHotel(String city, String hotel);
 }

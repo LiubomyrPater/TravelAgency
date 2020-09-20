@@ -14,4 +14,6 @@ public interface UserService {
     List<String> usersName();
 
     User findByEmail(String email);
+
+    List<UserDTO> findAllDTO();
 }

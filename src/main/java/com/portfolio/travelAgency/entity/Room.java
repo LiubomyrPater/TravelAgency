@@ -21,8 +21,6 @@ public class Room {
 
     private String number;
 
-    private Integer price;
-
     @ManyToOne
     private RoomType type;
 

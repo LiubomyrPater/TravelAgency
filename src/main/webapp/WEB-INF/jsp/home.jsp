@@ -104,7 +104,6 @@
             </div>
             <script>
                 function dateDepartureSelect() {
-
                     $.ajax({
                         url: "home/dateDepartureSelect?arrival=" + $("#dateArrival").val()
                         + "&departure=" + $("#dateDeparture").val()
@@ -115,7 +114,6 @@
                                 if(!value){
                                     alert("Wrong date. Before arrival or before today");
                                 }else {
-
                                     $('#selectHotel').removeAttr('disabled');
                                     createDropDownHotel(value.name);
                                 }
@@ -144,13 +142,14 @@
         </spring:bind>
         <script>
             function hotel_select() {
-                $('#selectType').removeAttr('disabled');
+                //
                 $.ajax({
                     url: "home/hotelSelectForm?hotel=" + $("#selectHotel option:selected").val()
                     + "&city=" + $("#selectCity option:selected").val()
                     + "&arrival=" + $("#dateArrival").val()
                     + "&departure=" + $("#dateDeparture").val(),
                     success: function(result){
+                        $('#selectType').removeAttr('disabled');//
                         clearDropDownType();
                         $.each(JSON.parse(result), function(index, value) {
                             createDropDownType(value.name)
@@ -177,7 +176,7 @@
         </spring:bind>
         <script>
             function type_select() {
-                $('#selectRoom').removeAttr('disabled');
+                //
                 $.ajax({
                     url: "home/typeSelectForm?hotel=" + $("#selectHotel option:selected").val()
                     + "&city=" + $("#selectCity option:selected").val()
@@ -185,8 +184,16 @@
                     + "&departure=" + $("#dateDeparture").val()
                     + "&type=" + $("#selectType option:selected").val(),
                     success: function(result){
+
+                        var rooms = JSON.parse(result);
+
+
+                        var price = rooms[0].price;
+                        rooms.shift();
+                        document.getElementById("priceType").value = price;
+                        $('#selectRoom').removeAttr('disabled');//
                         clearDropDownRoom();
-                        $.each(JSON.parse(result), function(index, value) {
+                        $.each(rooms, function(index, value) {
                             createDropDownRoom(value.number)
                         });
                     }
@@ -206,9 +213,10 @@
 
         <spring:bind path="price">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="number" path="price" class="form-control" readonly="true"></form:input>
+                <form:input type="number" placeholder="price" value="" path="price" class="form-control" id="priceType"></form:input>
             </div>
         </spring:bind>
+
 
         <spring:bind path="room">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
@@ -219,7 +227,7 @@
         </spring:bind>
         <script>
             function room_select() {
-                $('#reserveButton').removeAttr('disabled');
+                //
                 $.ajax({
                     url: "home/roomSelectForm?hotel=" + $("#selectHotel option:selected").val()
                     + "&city=" + $("#selectCity option:selected").val()
@@ -228,6 +236,7 @@
                     + "&type=" + $("#selectType option:selected").val()
                     + "&room=" + $("#selectRoom option:selected").val(),
                     success: function(result){
+                        $('#reserveButton').removeAttr('disabled');//
                         if (((JSON.parse(result))[0]).earlyArrival){
                             $('#earlyArrival').removeAttr('disabled');
                         }

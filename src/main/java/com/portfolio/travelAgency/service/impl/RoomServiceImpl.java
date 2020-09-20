@@ -28,6 +28,17 @@ public class RoomServiceImpl implements RoomService {
     private final HotelService hotelService;
     private final BookingService bookingService;
 
+
+    @Override
+    public Room findByID(Long id) {
+        return roomRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Room> findByHotelID(Long hotelID) {
+        return roomRepository.findByHotel(hotelService.findByID(hotelID));
+    }
+
     @Override
     @Transactional
     public void addRoomToHotel(RoomDTO roomDTO) {
@@ -36,18 +47,23 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> findByCityDateHotelType(String city, String arrival, String departure, String hotel, String typeRoom) {
-
+    public List<String> findByCityDateHotelType(String city,
+                                              String arrival,
+                                              String departure,
+                                              String hotel,
+                                              String typeRoom
+    ){
         Hotel persistedHotel = hotelService.findByNameAndCity(hotel, city);
-        RoomType roomType = roomTypeService.findByName(typeRoom);
 
-        Set<Room> rooms = persistedHotel.getRooms().stream().filter(x -> x.getType().equals(roomType)).collect(Collectors.toSet());
+        RoomType roomType = roomTypeService.findByNameAndHotelAndCity(typeRoom, hotel, city);
 
-        List<Room> freeRoomsList = rooms.stream()
+        return persistedHotel.getRooms()
+                .stream()
+                .filter(x -> x.getType().equals(roomType))
                 .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
+                .distinct()
+                .map(Room::getNumber)
                 .collect(Collectors.toList());
-
-        return freeRoomsList.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Set;
 
 public interface BookingService {
@@ -14,7 +16,9 @@ public interface BookingService {
 
     boolean matchDateDeparture(String dateArrival, String dateDeparture);
 
-    Set<Booking> findUserBookingsByEmail(String email);
+    List<BookingDTO> findUserBookingsByEmail(String email);
 
     boolean checkAvailabilityRooms (Set<Booking> bookingSet, String arrival, String departure);
+
+    Set<Booking> findAllByRoom(Long roomID);
 }

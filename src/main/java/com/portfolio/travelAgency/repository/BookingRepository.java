@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -16,7 +17,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Set<Booking> findUserBookings(Long userId);
 
     @Query("select u.bookings from User u where u.email=?1")
-    Set<Booking> findUserBookingsByEmail(String email);
+    List<Booking> findUserBookingsByEmail(String email);
 
     Set<Booking> findByRoom(Room room);
 }

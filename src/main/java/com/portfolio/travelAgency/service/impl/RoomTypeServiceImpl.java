@@ -27,8 +27,18 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     private final BookingService bookingService;
 
     @Override
-    public RoomType findByName(String name) {
-        return roomTypeRepository.findByName(name)
+    public List<String> findTypesByCityAndHotel(String city, String hotel) {
+        Hotel persistedHotel = hotelRepository.findByNameAndCity(hotel,cityService.findByName(city)).get();
+        return roomTypeRepository.findAllByHotel(persistedHotel)
+                .stream()
+                .map(RoomType::getName)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public RoomType findByNameAndHotelAndCity(String name, String hotel, String city) {
+        Hotel persistedHotel = hotelRepository.findByNameAndCity(hotel, cityService.findByName(city)).get();
+        return roomTypeRepository.findByNameAndAndHotel(name, persistedHotel)
                 .orElseThrow(() -> new EntityNotFoundException("Room type " + name + " was not found"));
     }
 

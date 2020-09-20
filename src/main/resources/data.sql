@@ -22,24 +22,15 @@ VALUES
 (7, 'Ritz', 2),
 (8, 'Natali', 1);
 
-INSERT into room_type(name)
-values
-  ('Suite'),
-  ('Family'),
-  ('Superior'),
-  ('Standard'),
-  ('Economy'),
-  ('Tourist'),
-  ('Meeting room');
 
-INSERT into room (number, price, hotel_id, type_id)
+INSERT into room (number,  hotel_id, type_id)
 VALUES
-  ('1A', 1000, 1, 4),
-  ('1', 2000, 7, 1),
-  ('100', 1500, 3, 3),
-  ('1213', 3000, 1, 1),
-  ('1', 1000, 2, 2),
-  ('2', 1000, 8, 7);
+  ('1A', 1, 4),
+  ('1', 7, 1),
+  ('100', 3, 3),
+  ('1213', 1, 1),
+  ('1', 2, 2),
+  ('2', 8, 7);
 
 insert into user (id, email, enabled, name, password, phone_number, surname)
 values

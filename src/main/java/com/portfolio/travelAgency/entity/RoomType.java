@@ -3,10 +3,7 @@ package com.portfolio.travelAgency.entity;
 import lombok.Getter;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Entity
@@ -18,6 +15,11 @@ public class RoomType {
 
     @UniqueElements
     private String name;
+
+    @ManyToOne
+    private Hotel hotel;
+
+    private Integer price;
 
     @Override
     public String toString() {

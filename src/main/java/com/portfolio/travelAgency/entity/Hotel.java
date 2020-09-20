@@ -25,6 +25,10 @@ public class Hotel {
     @JoinColumn(name = "hotel_id")
     private Set<Room> rooms = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hotel_id")
+    private Set<RoomType> roomTypes = new HashSet<>();
+
     @Override
     public String toString() {
         return name;

@@ -2,13 +2,16 @@ package com.portfolio.travelAgency.service.impl;
 
 import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.repository.BookingRepository;
+import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
+import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,13 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
+    private final RoomRepository roomRepository;
+
+
+    @Override
+    public Set<Booking> findAllByRoom(Long roomID) {
+        return bookingRepository.findByRoom(roomRepository.findById(roomID).get());
+    }
 
     @Override
     public boolean checkAvailabilityRooms(Set<Booking> bookingSet , String arrival, String departure) {
@@ -47,8 +57,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Set<Booking> findUserBookingsByEmail(String email) {
-        return bookingRepository.findUserBookingsByEmail(email);
+    public List<BookingDTO> findUserBookingsByEmail(String email) {
+        return bookingRepository.findUserBookingsByEmail(email)
+                .stream()
+                .map(bookingMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

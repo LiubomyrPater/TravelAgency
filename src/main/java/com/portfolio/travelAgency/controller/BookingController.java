@@ -76,6 +76,7 @@ public class BookingController {
         return jsonArrayTypes.toString();
     }
 
+
     @GetMapping("/home/typeSelectForm")
     @ResponseBody
     public String getType(@RequestParam String arrival,
@@ -84,17 +85,30 @@ public class BookingController {
                           @RequestParam String hotel,
                           @RequestParam String type){
 
-        List<Room> rooms = roomService.findByCityDateHotelType(city, arrival, departure, hotel, type);
+
+        JSONObject jsonObjectPrice = new JSONObject();
+        jsonObjectPrice.put("price",
+                hotelService.findByNameAndCity(hotel, city)
+                .getRoomTypes()
+                .stream()
+                .filter(x -> x.getName().equals(type))
+                .findFirst()
+                .get()
+                .getPrice()
+        );
 
         JSONArray jsonArrayRoom = new JSONArray();
-        for (Room r: rooms) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("number", r.getNumber());
-            jsonArrayRoom.add(jsonObject);
-        }
+        jsonArrayRoom.add(jsonObjectPrice);
+
+        roomService.findByCityDateHotelType(city, arrival, departure, hotel, type)
+                .forEach(r -> {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("number", r);
+                    jsonArrayRoom.add(jsonObject);
+        });
+
         return jsonArrayRoom.toString();
     }
-
 
 
     @GetMapping("/home/roomSelectForm")
@@ -103,7 +117,7 @@ public class BookingController {
                           @RequestParam String departure,
                           @RequestParam String city,
                           @RequestParam String hotel,
-                          @RequestParam String type,
+                          //@RequestParam String type,
                           @RequestParam String room){
 
         JSONArray jsonArrayRoomAvailable = new JSONArray();

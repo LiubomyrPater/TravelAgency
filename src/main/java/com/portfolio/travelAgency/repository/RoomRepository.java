@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
@@ -16,7 +17,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("select h.rooms from Hotel h where h.name=?1 and h.city=?2")
     List<Room> findRoomByHotelAndCity(String name, City city);
 
-    Room findByNumberAndHotel(String number, Hotel hotel);
+    Optional<Room> findByNumberAndHotel(String number, Hotel hotel);
 
     List<Room> findByHotel(Hotel hotel);
 }

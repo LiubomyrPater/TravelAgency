@@ -6,6 +6,7 @@ import com.portfolio.travelAgency.repository.*;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.impl.BookingServiceImpl;
 import com.portfolio.travelAgency.service.interfaces.*;
+import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -28,6 +31,7 @@ public class UserController {
     private final RoomService roomService;
     private final HotelService hotelService;
     private final BookingServiceImpl bookingService;
+    private final BookingMapper bookingMapper;
     private final CityService cityService;
     private final UserService userService;
 
@@ -39,7 +43,7 @@ public class UserController {
         bookingDTO.setUser(principal.getName());
 
         List<String> cityName = cityService.citiesName();
-        model.addAttribute("cities",cityName);
+        model.addAttribute("cities", cityName);
 
         List<String> hotelName = hotelService.hotelsName();
         model.addAttribute("hotels", hotelName);
@@ -66,24 +70,19 @@ public class UserController {
         if (bindingResult.hasErrors())
             return "home";
 
+        System.out.println(bookingDTO.getPrice());
         bookingService.createNewBooking(bookingDTO);
 
-        if (userService.findByEmail(principal.getName())
+        return userService.findByEmail(principal.getName())
                 .getRole()
-                .contains(roleRepository.findByName("ROLE_MANAGER"))
-                ){
-            return "redirect:/management/users";
-        }else {
-            return "redirect:/home/bookings";
-        }
+                .contains(roleRepository.findByName("ROLE_MANAGER")) ? "redirect:/management/users" : "redirect:/home/bookings";
     }
-
 
 
     @GetMapping("/home/bookings")
     public String userBookings (Model model, Principal principal){
 
-        Set<Booking> bookings = bookingService.findUserBookingsByEmail(principal.getName());
+        List<BookingDTO> bookings = bookingService.findUserBookingsByEmail(principal.getName());
         model.addAttribute("bookings", bookings);
         return "bookings";
     }

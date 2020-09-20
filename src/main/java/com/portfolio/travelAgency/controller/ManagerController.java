@@ -11,6 +11,7 @@ import com.portfolio.travelAgency.service.interfaces.CityService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.interfaces.RoomTypeService;
+import com.portfolio.travelAgency.service.mapper.HotelMapper;
 import com.portfolio.travelAgency.service.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import net.minidev.json.JSONArray;
@@ -20,9 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -37,14 +38,19 @@ public class ManagerController {
     private final HotelRepository hotelRepository;
 
     private final HotelService hotelService;
-    private final RoomTypeService roomTypeService;
     private final RoomService roomService;
     private final UserMapper userMapper;
+    private final HotelMapper hotelMapper;
     private final CityService cityService;
 
     @GetMapping("/management")
     public String managementPage() {
         return "management";
+    }
+
+    @GetMapping("/restManagement")
+    public String restManagementPage() {
+        return "restManagement";
     }
 
 
@@ -55,6 +61,7 @@ public class ManagerController {
         model.addAttribute("cities",cityName);
         return "addHotel";
     }
+
 
     @PostMapping("/management/addHotel")
     public String addHotelToCity(@ModelAttribute("addHotelForm") HotelDTO hotelDTO,
@@ -78,9 +85,6 @@ public class ManagerController {
         List<String> cityName = cityService.citiesName();
         model.addAttribute("cities",cityName);
 
-        List<String> roomTypeName = roomTypeService.roomTypesName();
-        model.addAttribute("types", roomTypeName);
-
         return "addRoom";
     }
 
@@ -98,10 +102,22 @@ public class ManagerController {
     @GetMapping("/management/users")
     public String allUsers (Model model){
 
-        List<UserDTO> userDTOS = new ArrayList<>();
-        userRepository.findAll().forEach(x -> userDTOS.add(userMapper.toDTO(x)));
+        List<UserDTO> userDTOS = userRepository.findAll().stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
         model.addAttribute("users", userDTOS);
         return "users";
+    }
+
+    @GetMapping("/management/hotels")
+    public String manageHotels (Model model){
+
+        List<HotelDTO> hotelDTOS = hotelService.findAll().stream()
+                .map(hotelMapper::toDTO)
+                .collect(Collectors.toList());
+
+        model.addAttribute("hotels", hotelDTOS);
+        return "hotels";
     }
 
     @GetMapping("/management/bookings")
@@ -118,12 +134,30 @@ public class ManagerController {
     public String getHotelsInCity(@RequestParam String city){
 
         JSONArray jsonArrayHotels = new JSONArray();
-        List<Hotel> hotels = hotelRepository.findByCity(cityService.findByName(city));
-        for (Hotel h: hotels) {
+
+        hotelRepository.findByCity(cityService.findByName(city))
+        .forEach(h -> {
             JSONObject jsonObjectHotel = new JSONObject();
             jsonObjectHotel.put("name", h.getName());
             jsonArrayHotels.add(jsonObjectHotel);
-        }
+        });
+        return jsonArrayHotels.toString();
+    }
+
+    @GetMapping("/management/hotelSelectForm")
+    @ResponseBody
+    public String getTypesInHotel(@RequestParam String hotel,
+                                  @RequestParam String city){
+
+        JSONArray jsonArrayHotels = new JSONArray();
+
+        hotelService.findByNameAndCity(hotel, city)
+                .getRoomTypes()
+                .forEach(r -> {
+            JSONObject jsonObjectHotel = new JSONObject();
+            jsonObjectHotel.put("name", r.getName());
+            jsonArrayHotels.add(jsonObjectHotel);
+        });
         return jsonArrayHotels.toString();
     }
 }

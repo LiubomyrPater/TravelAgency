@@ -9,11 +9,17 @@ public interface RoomService {
 
     void addRoomToHotel(RoomDTO roomDTO);
 
-    List<Room> findByCityDateHotelType(String city, String arrival, String departure, String hotel, String typeRoom);
+    List<String> findByCityDateHotelType(String city, String arrival, String departure, String hotel, String typeRoom);
+
+    List<Room> findByHotelID(Long hotelID);
 
     boolean earlyArrival(String city, String arrival, String hotel, String room);
 
     boolean lateDeparture (String city, String departure, String hotel, String room);
 
     List<String> roomsName();
+
+    Room findByID(Long id);
+
+
 }

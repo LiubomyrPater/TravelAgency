@@ -13,7 +13,15 @@ public interface HotelService {
 
     List<String> hotelsName();
 
-    Hotel findByName(String name);
+//    Hotel findByName(String name);
 
     Hotel findByNameAndCity(String hotel, String city);
+
+    List<Hotel> findAll();
+
+    List<HotelDTO> findAllDTO();
+
+    List<String> findByCity(String city);
+
+    Hotel findByID(Long id);
 }

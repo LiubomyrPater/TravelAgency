@@ -28,13 +28,13 @@ public class RoomMapper {
                 .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + roomDTO.getHotel() + " was not found"));
         result.setHotel(persistedHotel);
 
-        RoomType persistedRoomType = roomTypeRepository.findByName(roomDTO.getType())
+        RoomType persistedRoomType = roomTypeRepository.findByNameAndAndHotel(roomDTO.getType(), persistedHotel)
                 .orElseThrow(()-> new EntityNotFoundException("Type" + roomDTO.getType() + " was not found"));
         result.setType(persistedRoomType);
 
         result.setNumber(roomDTO.getNumber());
-        result.setPrice(roomDTO.getPrice());
-        result.setBookings(roomDTO.getBookings());
+        //result.setPrice(roomDTO.getPrice());
+        //result.setBookings(roomDTO.getBookings());
 
         return result;
     }
@@ -43,11 +43,12 @@ public class RoomMapper {
     public RoomDTO toDTO(Room room) {
 
         RoomDTO result = new RoomDTO();
-
+        result.setId(room.getId());
+        result.setType(room.getType().getName());
         result.setHotel(room.getHotel().getName());
         result.setNumber(room.getNumber());
-        result.setPrice(room.getPrice());
-        result.setBookings(room.getBookings());
+        //result.setPrice(room.getPrice());
+        //result.setBookings(room.getBookings());
 
         return result;
     }

@@ -29,17 +29,17 @@
                     <th><spring:message code="bookings.lateDeparture"/></th>
                 </tr>
                 <tbody>
-                    <c:forEach items="${bookings}" var="bookings">
+                    <c:forEach items="${bookings}" var="booking">
                         <tr>
-                            <td>${bookings.room.hotel}</td>
-                            <td>${bookings.room.type}</td>
-                            <td>${bookings.room.number}</td>
-                            <td>${bookings.price}</td>
-                            <td>${bookings.createMoment}</td>
-                            <td>${bookings.arrival}</td>
-                            <td>${bookings.departure}</td>
-                            <td>${bookings.earlyArrival}</td>
-                            <td>${bookings.lateDeparture}</td>
+                            <td>${booking.hotel}</td>
+                            <td>${booking.typeRoom}</td>
+                            <td>${booking.room}</td>
+                            <td>${booking.price}</td>
+                            <td>${booking.createMoment}</td>
+                            <td>${booking.arrival}</td>
+                            <td>${booking.departure}</td>
+                            <td>${booking.earlyArrival}</td>
+                            <td>${booking.lateDeparture}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

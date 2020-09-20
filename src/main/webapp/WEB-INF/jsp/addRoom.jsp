@@ -57,19 +57,45 @@
 
         <spring:bind path="hotel">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="hotel" class="form-control" id="selectHotel">
+                <form:select type="text" path="hotel" class="form-control" id="selectHotel" onclick="select_hotel()">
                     <%--<form:options items="${hotels}" />--%>
                 </form:select>
 
                 <form:errors path="hotel"></form:errors>
             </div>
         </spring:bind>
+        <script>
+            function select_hotel() {
+                $.ajax({
+                    url: "hotelSelectForm?hotel=" + $("#selectHotel option:selected").val()
+                    + "&city=" + $("#selectCity option:selected").val(),
+                    success: function(result){
+                        $('#selectTypes').removeAttr('disabled');
+
+                        clearDropDownTypes();
+                        $.each(JSON.parse(result), function(index, value) {
+                            createDropDownTypes(value.name)
+                        });
+                    }
+                });
+            }
+            function clearDropDownTypes() {
+                const dropDown = document.getElementById("selectTypes");
+                dropDown.innerHTML = "";
+            }
+            function createDropDownTypes(name) {
+                const dropDown = document.getElementById("selectTypes");
+                const option = document.createElement("option");
+                option.textContent = name;
+                dropDown.appendChild(option);
+            }
+        </script>
 
 
         <spring:bind path="type">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="type" class="form-control">
-                    <form:options items="${types}" />
+                <form:select type="text" path="type" class="form-control" disabled="true" id="selectTypes">
+                    <%--<form:options items="${types}" />--%>
                 </form:select>
 
                 <form:errors path="type"></form:errors>

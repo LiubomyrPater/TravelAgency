@@ -12,9 +12,9 @@ import java.util.Set;
 @Setter
 public class RoomDTO {
 
-    private String number;
+    private Long id;
 
-    private Integer price;
+    private String number;
 
     private String type;
 
@@ -22,6 +22,6 @@ public class RoomDTO {
 
     private String city;
 
-    private Set<Booking> bookings = new HashSet<>();
+    //private Set<Booking> bookings = new HashSet<>();
 
 }
