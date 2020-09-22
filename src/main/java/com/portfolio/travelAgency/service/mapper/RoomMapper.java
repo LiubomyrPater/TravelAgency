@@ -33,8 +33,6 @@ public class RoomMapper {
         result.setType(persistedRoomType);
 
         result.setNumber(roomDTO.getNumber());
-        //result.setPrice(roomDTO.getPrice());
-        //result.setBookings(roomDTO.getBookings());
 
         return result;
     }
@@ -47,8 +45,6 @@ public class RoomMapper {
         result.setType(room.getType().getName());
         result.setHotel(room.getHotel().getName());
         result.setNumber(room.getNumber());
-        //result.setPrice(room.getPrice());
-        //result.setBookings(room.getBookings());
 
         return result;
     }

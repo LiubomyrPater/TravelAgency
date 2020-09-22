@@ -14,7 +14,7 @@ import java.util.Set;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("select u.bookings from User u where u.id=?1")
-    Set<Booking> findUserBookings(Long userId);
+    List<Booking> findUserBookings(Long userId);
 
     @Query("select u.bookings from User u where u.email=?1")
     List<Booking> findUserBookingsByEmail(String email);

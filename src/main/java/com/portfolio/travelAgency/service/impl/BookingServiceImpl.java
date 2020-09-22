@@ -5,7 +5,6 @@ import com.portfolio.travelAgency.repository.BookingRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
-import com.portfolio.travelAgency.service.interfaces.RoomService;
 import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,19 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public Set<Booking> findAllByRoom(Long roomID) {
-        return bookingRepository.findByRoom(roomRepository.findById(roomID).get());
+    public List<BookingDTO> findUserBookingByID(Long userID) {
+        return bookingRepository.findUserBookings(userID)
+                .stream()
+                .map(bookingMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookingDTO> findAllByRoom(Long roomID) {
+        return bookingRepository.findByRoom(roomRepository.findById(roomID).get())
+                .stream()
+                .map(bookingMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -36,7 +46,11 @@ public class BookingServiceImpl implements BookingService {
         LocalDate departureDate = LocalDate.parse(departure);
         LocalDate today = LocalDate.now().minusDays(1);
 
-        bookingSet = bookingSet.stream().filter(x -> x.getDeparture().isAfter(today)).collect(Collectors.toSet());
+        bookingSet = bookingSet.stream()
+                .filter(x -> x.getDeparture()
+                        .isAfter(today))
+                .collect(Collectors.toSet());
+
         if (bookingSet.size() == 0){
             return  true;
         }else {
@@ -71,9 +85,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public boolean matchDateArrival(String date) {
-        LocalDate choseDate = LocalDate.parse(date);
-
-        return !choseDate.isBefore(LocalDate.now());
+        /*LocalDate choseDate = LocalDate.parse(date);
+        return !choseDate.isBefore(LocalDate.now());*/
+        return !LocalDate.parse(date).isBefore(LocalDate.now());
     }
 
     @Override

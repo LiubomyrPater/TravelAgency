@@ -21,34 +21,24 @@ import java.util.stream.Collectors;
 public class HotelController {
 
     private final RoomService roomService;
-    private final RoomMapper roomMapper;
     private final BookingService bookingService;
-    private final BookingMapper bookingMapper;
-
 
     @GetMapping("/management/hotels/rooms")
-    public String getRooms (Model model,
-                            @RequestParam("hotelId") Long hotelId){
+    public String getRooms (@RequestParam("hotelId") Long hotelId,
+                            Model model){
 
-        List<RoomDTO> roomDTOS = roomService.findByHotelID(hotelId).stream()
-                .map(roomMapper::toDTO)
-                .collect(Collectors.toList());
-
+        List<RoomDTO> roomDTOS = roomService.findByHotelID(hotelId);
         model.addAttribute("rooms", roomDTOS);
         return "rooms";
     }
 
 
     @GetMapping("/management/hotels/rooms/roomBookings")
-    public String getBookings (Model model,
-                               @RequestParam("roomId") Long roomId){
+    public String getBookings (@RequestParam("roomId") Long roomId,
+                               Model model){
 
-        Set<BookingDTO> bookingDTOS = bookingService.findAllByRoom(roomId).stream()
-                .map(bookingMapper::toDTO)
-                .collect(Collectors.toSet());
-
+        List<BookingDTO> bookingDTOS = bookingService.findAllByRoom(roomId);
         model.addAttribute("bookings", bookingDTOS);
-
         return "roomBookings";
     }
 }

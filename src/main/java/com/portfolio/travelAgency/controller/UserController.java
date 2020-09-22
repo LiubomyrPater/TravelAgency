@@ -26,12 +26,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final BookingValidator bookingValidator;
+
     private final RoleRepository roleRepository;
+
     private final RoomTypeService roomTypeService;
     private final RoomService roomService;
     private final HotelService hotelService;
     private final BookingServiceImpl bookingService;
-    private final BookingMapper bookingMapper;
     private final CityService cityService;
     private final UserService userService;
 
@@ -70,7 +71,6 @@ public class UserController {
         if (bindingResult.hasErrors())
             return "home";
 
-        System.out.println(bookingDTO.getPrice());
         bookingService.createNewBooking(bookingDTO);
 
         return userService.findByEmail(principal.getName())

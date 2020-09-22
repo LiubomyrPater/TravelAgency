@@ -35,8 +35,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> findByHotelID(Long hotelID) {
-        return roomRepository.findByHotel(hotelService.findByID(hotelID));
+    public List<RoomDTO> findByHotelID(Long hotelID) {
+        return roomRepository.findByHotel(hotelService.findByID(hotelID))
+                .stream()
+                .map(roomMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

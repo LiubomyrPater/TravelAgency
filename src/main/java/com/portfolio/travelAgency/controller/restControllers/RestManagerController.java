@@ -48,18 +48,28 @@ public class RestManagerController {
         return userService.findAllDTO();
     }
 
-    @GetMapping("/getRoomsByTypeHotelCityAvailable_dateDTO/{type}, {hotel}, {city}, {arrival}, {departure}")
-    public List<String> getRoomsDTO(@PathVariable String type,
-                                    @PathVariable String hotel,
-                                    @PathVariable String city,
-                                    @PathVariable String arrival,
-                                    @PathVariable String departure){
+    @GetMapping("/getRoomsByTypeHotelCityAvailable_date/{type}, {hotel}, {city}, {arrival}, {departure}")
+    public List<String> getRoomsName(@PathVariable String type,
+                                     @PathVariable String hotel,
+                                     @PathVariable String city,
+                                     @PathVariable String arrival,
+                                     @PathVariable String departure){
         return roomService.findByCityDateHotelType(city, arrival, departure, hotel, type);
     }
 
-    @GetMapping("/getBookingsDTOByUser")
-    public List<BookingDTO> getBookingsDTO(@PathVariable String user){
-        return bookingService.findUserBookingsByEmail(user);
+    @GetMapping("/getRoomsDTObyHotelID/{hotel_id}")
+    public List<RoomDTO> getRoomsDTObyHotelID(@PathVariable Long hotelID){
+        return roomService.findByHotelID(hotelID);
+    }
+
+    @GetMapping("/getBookingsDTObyUser")
+    public List<BookingDTO> getBookingsDTO(@PathVariable String email){
+        return bookingService.findUserBookingsByEmail(email);
+    }
+
+    @GetMapping("/getBookingsByRoom")
+    public List<BookingDTO> getBookingsByRoom(@PathVariable Long roomID){
+        return bookingService.findAllByRoom(roomID);
     }
 
 

@@ -34,7 +34,10 @@ public class BookingMapper {
         result.setUser(userRepository.findByEmail(bookingDTO.getUser()).get());
         result.setRoom(roomRepository.findByNumberAndHotel(bookingDTO.getRoom(),
                 hotelRepository.findByNameAndCity(bookingDTO.getHotel(),
-                        cityRepository.findByName(bookingDTO.getCity()).get()).get()).get());
+                        cityRepository.findByName(bookingDTO.getCity())
+                                .get())
+                        .get())
+                .get());
 
         return result;
     }

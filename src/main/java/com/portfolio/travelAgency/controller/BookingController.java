@@ -1,8 +1,5 @@
 package com.portfolio.travelAgency.controller;
 
-import com.portfolio.travelAgency.entity.Hotel;
-import com.portfolio.travelAgency.entity.Room;
-import com.portfolio.travelAgency.entity.RoomType;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.HotelService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
@@ -14,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -48,12 +43,12 @@ public class BookingController {
 
         if (decide){
             JSONArray jsonArrayHotels = new JSONArray();
-            List<Hotel> freeHotels = hotelService.findFreeHotels(city, arrival, departure);
-            for (Hotel h: freeHotels) {
-                JSONObject jsonObjectHotel = new JSONObject();
-                jsonObjectHotel.put("name", h.getName());
-                jsonArrayHotels.add(jsonObjectHotel);
-            }
+            hotelService.findFreeHotels(city, arrival, departure)
+                    .forEach(h -> {
+                        JSONObject jsonObjectHotel = new JSONObject();
+                        jsonObjectHotel.put("name", h);
+                        jsonArrayHotels.add(jsonObjectHotel);
+                    });
             return jsonArrayHotels.toString();
         }else return jsonObjectDecide.toString();
     }
@@ -67,12 +62,13 @@ public class BookingController {
                           @RequestParam String hotel){
 
         JSONArray jsonArrayTypes = new JSONArray();
-        List<RoomType> roomTypes = roomTypeService.findRoomTypesAvailable(city, arrival, departure, hotel);
-        for (RoomType type: roomTypes) {
-            JSONObject jsonObjectRoomType = new JSONObject();
-            jsonObjectRoomType.put("name", type.getName());
-            jsonArrayTypes.add(jsonObjectRoomType);
-        }
+
+        roomTypeService.findRoomTypesAvailable(city, arrival, departure, hotel)
+                .forEach(type -> {
+                    JSONObject jsonObjectRoomType = new JSONObject();
+                    jsonObjectRoomType.put("name", type);
+                    jsonArrayTypes.add(jsonObjectRoomType);
+                });
         return jsonArrayTypes.toString();
     }
 
@@ -87,26 +83,17 @@ public class BookingController {
 
 
         JSONObject jsonObjectPrice = new JSONObject();
-        jsonObjectPrice.put("price",
-                hotelService.findByNameAndCity(hotel, city)
-                .getRoomTypes()
-                .stream()
-                .filter(x -> x.getName().equals(type))
-                .findFirst()
-                .get()
-                .getPrice()
+        jsonObjectPrice.put("price", hotelService.getPriceRoomType(hotel,city,type)
         );
 
         JSONArray jsonArrayRoom = new JSONArray();
         jsonArrayRoom.add(jsonObjectPrice);
-
         roomService.findByCityDateHotelType(city, arrival, departure, hotel, type)
                 .forEach(r -> {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("number", r);
                     jsonArrayRoom.add(jsonObject);
-        });
-
+                });
         return jsonArrayRoom.toString();
     }
 

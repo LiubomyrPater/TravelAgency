@@ -9,19 +9,19 @@ public interface HotelService {
 
     void addHotelToCity(HotelDTO hotelDTO);
 
-    List<Hotel> findFreeHotels(String city, String arrival, String departure);
+    List<String> findFreeHotels(String city, String arrival, String departure);
 
     List<String> hotelsName();
 
-//    Hotel findByName(String name);
-
     Hotel findByNameAndCity(String hotel, String city);
 
-    List<Hotel> findAll();
+    List<HotelDTO> findAll();
 
     List<HotelDTO> findAllDTO();
 
     List<String> findByCity(String city);
 
     Hotel findByID(Long id);
+
+    Integer getPriceRoomType(String hotel, String city, String type);
 }

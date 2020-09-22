@@ -1,6 +1,5 @@
 package com.portfolio.travelAgency.service.impl;
 
-import com.portfolio.travelAgency.entity.City;
 import com.portfolio.travelAgency.entity.Hotel;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.service.dto.HotelDTO;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +25,17 @@ public class HotelServiceImpl implements HotelService {
     private final HotelRepository hotelRepository;
     private final CityService cityService;
     private final BookingService bookingService;
+
+
+    @Override
+    public Integer getPriceRoomType(String hotel, String city, String type) {
+        return findByNameAndCity(hotel, city).getRoomTypes()
+                .stream()
+                .filter(x -> x.getName().equals(type))
+                .findFirst()
+                .get()
+                .getPrice();
+    }
 
     @Override
     public List<String> findByCity(String city) {
@@ -50,8 +59,11 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> findAll() {
-        return hotelRepository.findAll();
+    public List<HotelDTO> findAll() {
+        return hotelRepository.findAll()
+                .stream()
+                .map(hotelMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -60,45 +72,34 @@ public class HotelServiceImpl implements HotelService {
                 .orElseThrow(() -> new EntityNotFoundException("Hotel was not found"));
     }
 
-    /*@Override
-    public Hotel findByName(String name) {
-        return hotelRepository.findByName(name)
-                .orElseThrow(() -> new EntityNotFoundException("Hotel with name " + name + " was not found"));
-    }*/
-
     @Override
     @Transactional
     public void addHotelToCity(HotelDTO hotelDTO) {
         Hotel hotel = hotelMapper.toEntity(hotelDTO);
         hotelRepository.save(hotel);
-/*
-        Hotel persistedHotel = findByName(hotelDTO.getName());
-
-        City persistedCity = cityService.findByName(hotelDTO.getCity());
-
-        persistedCity.getHotels().add(persistedHotel);
-        cityService.save(persistedCity);*/
     }
 
     @Override
-    public List<Hotel> findFreeHotels(String city, String arrival, String departure) {
+    public List<String> findFreeHotels(String city, String arrival, String departure) {
 
-        List<Hotel> allHotelsByCity = hotelRepository.findByCity(cityService.findByName(city));
+        List<String> freeHotels = new ArrayList<>();
 
-        List<Hotel> freeHotels = new ArrayList<>();
-
-        allHotelsByCity.forEach(h -> h.getRooms().stream()
-                .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
-                .map(r -> h)
-                .forEach(freeHotels::add));
-
-        return freeHotels.stream().distinct().collect(Collectors.toList());
+        hotelRepository.findByCity(cityService.findByName(city))
+                .forEach(h -> h.getRooms()
+                        .stream()
+                        .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
+                        .map(r -> h.getName())
+                        .distinct()
+                        .forEach(freeHotels::add)
+                );
+        return freeHotels;
     }
 
     @Override
     public List<String> hotelsName() {
-        List<String> hotelName = new ArrayList<>();
-        hotelRepository.findAll().forEach(x -> hotelName.add(x.getName()));
-        return hotelName;
+        return hotelRepository.findAll()
+                .stream()
+                .map(Hotel::getName)
+                .collect(Collectors.toList());
     }
 }

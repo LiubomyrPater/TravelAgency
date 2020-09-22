@@ -18,7 +18,11 @@ public interface BookingService {
 
     List<BookingDTO> findUserBookingsByEmail(String email);
 
+    List<BookingDTO> findUserBookingByID(Long userID);
+
     boolean checkAvailabilityRooms (Set<Booking> bookingSet, String arrival, String departure);
 
-    Set<Booking> findAllByRoom(Long roomID);
+    List<BookingDTO> findAllByRoom(Long roomID);
+
+
 }
