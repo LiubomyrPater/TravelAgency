@@ -1,12 +1,10 @@
 package com.portfolio.travelAgency.controller;
 
 import com.portfolio.travelAgency.controller.validator.BookingValidator;
-import com.portfolio.travelAgency.entity.Booking;
 import com.portfolio.travelAgency.repository.*;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.impl.BookingServiceImpl;
 import com.portfolio.travelAgency.service.interfaces.*;
-import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -72,12 +67,10 @@ public class UserController {
             return "home";
 
         bookingService.createNewBooking(bookingDTO);
-
         return userService.findByEmail(principal.getName())
                 .getRole()
                 .contains(roleRepository.findByName("ROLE_MANAGER")) ? "redirect:/management/users" : "redirect:/home/bookings";
     }
-
 
     @GetMapping("/home/bookings")
     public String userBookings (Model model, Principal principal){

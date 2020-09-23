@@ -4,8 +4,6 @@ import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.dto.RoomDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
 import com.portfolio.travelAgency.service.interfaces.RoomService;
-import com.portfolio.travelAgency.service.mapper.BookingMapper;
-import com.portfolio.travelAgency.service.mapper.RoomMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor

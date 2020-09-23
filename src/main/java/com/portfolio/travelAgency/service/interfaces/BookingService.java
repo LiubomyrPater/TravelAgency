@@ -1,6 +1,7 @@
 package com.portfolio.travelAgency.service.interfaces;
 
 import com.portfolio.travelAgency.entity.Booking;
+import com.portfolio.travelAgency.entity.BookingsArchived;
 import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 
@@ -24,5 +25,8 @@ public interface BookingService {
 
     List<BookingDTO> findAllByRoom(Long roomID);
 
+    List<BookingsArchived> archivedOldBookings();
+
+    List<BookingsArchived> archivedUnpaidBookings();
 
 }

@@ -32,7 +32,7 @@ public class RegisterUserEventListener {
 
         message.setTo(user.getEmail());
         message.setSubject("Registration confirm");
-        message.setText("For comfirm registration please clik the link below "
+        message.setText("For confirm registration please click the link below "
                 + baseUrl
                 + "/confirmRegistration?token="
                 + token.getToken());

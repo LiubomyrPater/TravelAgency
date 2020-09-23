@@ -1,14 +1,18 @@
 package com.portfolio.travelAgency.service.impl;
 
 import com.portfolio.travelAgency.entity.Booking;
+import com.portfolio.travelAgency.entity.BookingsArchived;
+import com.portfolio.travelAgency.repository.ArchivedBookingRepository;
 import com.portfolio.travelAgency.repository.BookingRepository;
 import com.portfolio.travelAgency.repository.RoomRepository;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
+import com.portfolio.travelAgency.service.mapper.ArchivedBookingMapper;
 import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +25,37 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
     private final RoomRepository roomRepository;
+    private final ArchivedBookingMapper archivedBookingMapper;
+    private final ArchivedBookingRepository archivedBookingRepository;
 
+
+    @Override
+    public List<BookingsArchived> archivedOldBookings() {
+        List<Booking> oldBookings = bookingRepository.findAllByDepartureBefore(LocalDate.now());
+        List<BookingsArchived> bookingsArchived = oldBookings
+                .stream()
+                .map(archivedBookingMapper::toArchived)
+                .collect(Collectors.toList());
+
+        bookingRepository.deleteAll(oldBookings);
+     return archivedBookingRepository.saveAll(bookingsArchived);
+    }
+
+    @Override
+    public List<BookingsArchived> archivedUnpaidBookings() {
+        List<Booking> unpaidBookings = bookingRepository.findAllByArrivalBefore(LocalDate.now())
+                .stream()
+                .filter(x -> !x.isPaid())
+                .collect(Collectors.toList());
+
+        List<BookingsArchived> bookingsArchived = unpaidBookings
+                .stream()
+                .map(archivedBookingMapper::toArchived)
+                .collect(Collectors.toList());
+
+        bookingRepository.deleteAll(unpaidBookings);
+        return archivedBookingRepository.saveAll(bookingsArchived);
+    }
 
     @Override
     public List<BookingDTO> findUserBookingByID(Long userID) {

@@ -33,6 +33,7 @@ public class ManagerController {
 
     @GetMapping("/management")
     public String managementPage() {
+        /*System.out.println(bookingService.archivedOldBookings());*/
         return "management";
     }
 

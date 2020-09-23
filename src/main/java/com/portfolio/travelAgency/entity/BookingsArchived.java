@@ -3,28 +3,24 @@ package com.portfolio.travelAgency.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class Booking {
-
+public class BookingsArchived {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private int id;
 
-    @ManyToOne
-    private User user;
+    private Long oldId;
 
-    @ManyToOne
-    private Room room;
+    private String user;
+
+    private long room;
 
     private Integer price;
 
@@ -40,4 +36,5 @@ public class Booking {
 
     private boolean paid;
 
+    private LocalDateTime deleteMoment;
 }
