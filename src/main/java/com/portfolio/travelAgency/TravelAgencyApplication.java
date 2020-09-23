@@ -3,6 +3,7 @@ package com.portfolio.travelAgency;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
 import lombok.extern.slf4j.Slf4j;
 
+import org.quartz.impl.calendar.AnnualCalendar;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +22,7 @@ public class TravelAgencyApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         log.info("Start clearing database");
         System.out.println(bookingService.archivedOldBookings());
         System.out.println(bookingService.archivedUnpaidBookings());
