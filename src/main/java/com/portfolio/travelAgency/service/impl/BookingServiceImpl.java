@@ -12,7 +12,6 @@ import com.portfolio.travelAgency.service.mapper.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -30,8 +29,8 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public List<BookingsArchived> archivedOldBookings() {
-        List<Booking> oldBookings = bookingRepository.findAllByDepartureBefore(LocalDate.now());
+    public List<BookingsArchived> archivedTodayBookings() {
+        List<Booking> oldBookings = bookingRepository.findAllByDepartureEquals(LocalDate.now());
         List<BookingsArchived> bookingsArchived = oldBookings
                 .stream()
                 .map(archivedBookingMapper::toArchived)
@@ -42,8 +41,20 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<BookingsArchived> archivedOldBookings() {
+        List<Booking> oldBookings = bookingRepository.findAllByDepartureBefore(LocalDate.now());
+        List<BookingsArchived> bookingsArchived = oldBookings
+                .stream()
+                .map(archivedBookingMapper::toArchived)
+                .collect(Collectors.toList());
+
+        bookingRepository.deleteAll(oldBookings);
+        return archivedBookingRepository.saveAll(bookingsArchived);
+    }
+
+    @Override
     public List<BookingsArchived> archivedUnpaidBookings() {
-        List<Booking> unpaidBookings = bookingRepository.findAllByArrivalBefore(LocalDate.now())
+        List<Booking> unpaidBookings = bookingRepository.findAllByArrivalEquals(LocalDate.now())
                 .stream()
                 .filter(x -> !x.isPaid())
                 .collect(Collectors.toList());

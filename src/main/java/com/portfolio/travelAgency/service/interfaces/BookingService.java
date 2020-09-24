@@ -25,6 +25,8 @@ public interface BookingService {
 
     List<BookingDTO> findAllByRoom(Long roomID);
 
+    List<BookingsArchived> archivedTodayBookings();
+
     List<BookingsArchived> archivedOldBookings();
 
     List<BookingsArchived> archivedUnpaidBookings();

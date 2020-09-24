@@ -21,7 +21,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Set<Booking> findByRoom(Room room);
 
+    List<Booking> findAllByDepartureEquals(LocalDate now);
+
     List<Booking> findAllByDepartureBefore(LocalDate now);
 
-    List<Booking> findAllByArrivalBefore(LocalDate now);
+    List<Booking> findAllByArrivalEquals(LocalDate now);
 }
