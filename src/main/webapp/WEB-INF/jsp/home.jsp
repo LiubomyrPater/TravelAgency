@@ -64,7 +64,13 @@
         <script>
             function city_select() {
                 $('#dateArrival').removeAttr('disabled');
-                /*Refresh whole form*/
+
+                document.getElementById('selectHotel').setAttribute("disabled", "");
+                document.getElementById('selectType').setAttribute("disabled", "");
+                document.getElementById('selectRoom').setAttribute("disabled", "");
+                document.getElementById('earlyArrival').setAttribute("disabled", "");
+                document.getElementById('lateDeparture').setAttribute("disabled", "");
+                document.getElementById('reserveButton').setAttribute("disabled", "");
             }
         </script>
         <div class="row">
@@ -142,7 +148,12 @@
         </spring:bind>
         <script>
             function hotel_select() {
-                //
+
+                document.getElementById('selectRoom').setAttribute("disabled", "");
+                document.getElementById('earlyArrival').setAttribute("disabled", "");
+                document.getElementById('lateDeparture').setAttribute("disabled", "");
+                document.getElementById('reserveButton').setAttribute("disabled", "");
+
                 $.ajax({
                     url: "home/hotelSelectForm?hotel=" + $("#selectHotel option:selected").val()
                     + "&city=" + $("#selectCity option:selected").val()
@@ -176,7 +187,11 @@
         </spring:bind>
         <script>
             function type_select() {
-                //
+
+                document.getElementById('earlyArrival').setAttribute("disabled", "");
+                document.getElementById('lateDeparture').setAttribute("disabled", "");
+                document.getElementById('reserveButton').setAttribute("disabled", "");
+
                 $.ajax({
                     url: "home/typeSelectForm?hotel=" + $("#selectHotel option:selected").val()
                     + "&city=" + $("#selectCity option:selected").val()
@@ -252,7 +267,7 @@
                 <spring:bind path="earlyArrival">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <form:checkbox path="earlyArrival" class="form-control" disabled="true" id="earlyArrival" label="Early arrival"></form:checkbox>
-                        <form:errors path="earlyArrival"></form:errors>
+                        <%--<form:errors path="earlyArrival"></form:errors>--%>
                     </div>
                 </spring:bind>
             </div>
@@ -260,7 +275,7 @@
                 <spring:bind path="lateDeparture">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <form:checkbox path="lateDeparture" class="form-control" disabled="true" id="lateDeparture" label="Late departure"></form:checkbox>
-                        <form:errors path="lateDeparture"></form:errors>
+                        <%--<form:errors path="lateDeparture"></form:errors>--%>
                     </div>
                 </spring:bind>
             </div>

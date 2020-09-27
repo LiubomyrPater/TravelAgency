@@ -32,6 +32,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public void changeUserStatus(String user) {
+        User persistedUser =userRepository.findByEmail(user).get();
+        persistedUser.setEnabled(userRepository.findByEmail(user).get().isEnabled() ? false : true);
+        userRepository.save(persistedUser);
+    }
+
+    @Override
     public List<UserDTO> findAllDTO() {
         return userRepository.findAll()
                 .stream()

@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -43,6 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    @Bean(name = "sessionRegistry")
+    public SessionRegistry sessionRegistry(){
+        return new SessionRegistryImpl();
+    }
+
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
@@ -80,6 +88,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID")
+
+
+
+                .and()
+                .sessionManagement()
+                .invalidSessionUrl("/login")
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+                .sessionRegistry(sessionRegistry())
         ;
     }
 }

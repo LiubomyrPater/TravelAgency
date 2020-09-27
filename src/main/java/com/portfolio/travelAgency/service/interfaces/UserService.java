@@ -16,4 +16,6 @@ public interface UserService {
     User findByEmail(String email);
 
     List<UserDTO> findAllDTO();
+
+    void changeUserStatus(String user);
 }

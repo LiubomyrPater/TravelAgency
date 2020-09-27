@@ -23,7 +23,6 @@ public class ManagerController {
 
     private final AddHotelValidator addHotelValidator;
     private final AddRoomValidator addRoomValidator;
-
     private final HotelService hotelService;
     private final RoomService roomService;
     private final CityService cityService;
@@ -142,5 +141,12 @@ public class ManagerController {
                     jsonArrayHotels.add(jsonObjectHotel);
                 });
         return jsonArrayHotels.toString();
+    }
+
+    @GetMapping("/management/users/changeStatus")
+    @ResponseBody
+    public String changeStatus(@RequestParam String user){
+        userService.changeUserStatus(user);
+        return "Success";
     }
 }

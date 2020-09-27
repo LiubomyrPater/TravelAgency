@@ -26,25 +26,45 @@
                     <th><spring:message code="users.enabled"/></th>
                     <th><spring:message code="users.role"/></th>
                     <th><spring:message code="users.bookings"/></th>
+
                 </tr>
 
                 <tbody>
-                <c:forEach items="${users}" var="users">
+                <c:forEach items="${users}" var="user">
                     <tr>
-                        <td>${users.email}</td>
-                        <td>${users.name}</td>
-                        <td>${users.surname}</td>
-                        <td>${users.phoneNumber}</td>
-                        <td>${users.enabled}</td>
-                        <td>${users.role}</td>
-                        <td><a href="<c:url value='/management/bookings?userId=${users.id}'/>" class="btn btn-success custom width">
+                        <td>${user.email}</td>
+                        <td>${user.name}</td>
+                        <td>${user.surname}</td>
+                        <td>${user.phoneNumber}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <c:if test="${user.enabled}">
+                                <input type="checkbox" name="enabled" id="enable-status" checked="checked" onchange="change_status('${user.email}')">
+                            </c:if>
+                            <c:if test="${!user.enabled}">
+                                <input type="checkbox" name="enabled" id="enable-status" onchange="change_status('${user.email}')">
+                            </c:if>
+                            <script>
+                                function change_status(email) {
+                                    $.ajax({
+                                        url: "users/changeStatus?user=" + email,
+                                        success: function(result){
+                                            console.log(result)
+                                        }
+                                    });
+                                }
+                            </script>
+                        </td>
+                        <td>${user.role}</td>
+                        <td><a href="<c:url value='/management/bookings?userId=${user.id}'/>" class="btn btn-success custom width">
                             <spring:message code="users.bookings"/></a></td>
                     </tr>
+
                 </c:forEach>
                 </tbody>
             </table>
         </div>
 </div>
+
 
 </body>
 </html>

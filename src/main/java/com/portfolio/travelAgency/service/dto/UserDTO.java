@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+
 public class UserDTO {
 
     private Long id;
@@ -32,4 +33,11 @@ public class UserDTO {
 
     private Set<Role> role = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "email='" + email + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }
