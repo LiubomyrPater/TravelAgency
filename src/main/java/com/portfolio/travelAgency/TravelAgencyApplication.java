@@ -23,7 +23,7 @@ public class TravelAgencyApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         log.info("Start clearing database");
-        System.out.println(bookingService.archivedOldBookings());
+        System.out.println("have moved in archive" + bookingService.archivedOldBookings());
         log.info("Finish clearing database");
 
         scheduledService.runEveryDayAt1800();

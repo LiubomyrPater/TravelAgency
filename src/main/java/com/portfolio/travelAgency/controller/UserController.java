@@ -21,12 +21,8 @@ import java.util.List;
 public class UserController {
 
     private final BookingValidator bookingValidator;
-
     private final RoleRepository roleRepository;
-
     private final RoomTypeService roomTypeService;
-    private final RoomService roomService;
-    private final HotelService hotelService;
     private final BookingServiceImpl bookingService;
     private final CityService cityService;
     private final UserService userService;
@@ -38,9 +34,16 @@ public class UserController {
 
         bookingDTO.setUser(principal.getName());
 
+        List<String> users = userService.usersName();
+        model.addAttribute("users", users);
+
         List<String> cityName = cityService.citiesName();
         model.addAttribute("cities", cityName);
 
+        model.addAttribute("superMinPrice", roomTypeService.superMinPrice());
+
+        model.addAttribute("superMaxPrice", roomTypeService.superMaxPrice());
+/*
         List<String> hotelName = hotelService.hotelsName();
         model.addAttribute("hotels", hotelName);
 
@@ -49,13 +52,9 @@ public class UserController {
 
         List<String> roomTypes = roomTypeService.roomTypesName();
         model.addAttribute("roomTypes", roomTypes);
-
-        List<String> users = userService.usersName();
-        model.addAttribute("users", users);
-
+*/
         return "home";
     }
-
 
     @PostMapping("/home")
     public String reserve(@ModelAttribute ("bookingForm") BookingDTO bookingDTO,

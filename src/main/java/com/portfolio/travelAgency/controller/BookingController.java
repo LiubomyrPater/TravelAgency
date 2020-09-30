@@ -21,6 +21,18 @@ public class BookingController {
     private final RoomTypeService roomTypeService;
     private final RoomService roomService;
 
+    @GetMapping("home/citySelect")
+    @ResponseBody
+    public String getPrices(@RequestParam String city){
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("minPrice", roomTypeService.findTheCheapestType(city));
+        jsonObject.put("maxPrice", roomTypeService.findTheMostExpensiveType(city));
+
+        return jsonObject.toString();
+    }
+
+
     @GetMapping("/home/dateArrivalSelect")
     @ResponseBody
     public String getArrival(@RequestParam String arrival){
@@ -80,7 +92,6 @@ public class BookingController {
                           @RequestParam String city,
                           @RequestParam String hotel,
                           @RequestParam String type){
-
 
         JSONObject jsonObjectPrice = new JSONObject();
         jsonObjectPrice.put("price", hotelService.getPriceRoomType(hotel,city,type)

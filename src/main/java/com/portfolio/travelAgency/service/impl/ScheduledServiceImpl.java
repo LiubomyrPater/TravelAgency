@@ -25,7 +25,7 @@ public class ScheduledServiceImpl implements ScheduledService {
         LocalTime targetTime = LocalTime.parse("18:00:00");
         if (!time.isBefore(targetTime)){
             log.info("Start clearing database");
-            System.out.println(bookingService.archivedTodayBookings());
+            System.out.println("have moved in archive" + bookingService.archivedTodayBookings());
             log.info("Finish clearing database");
         }
     }
@@ -37,7 +37,7 @@ public class ScheduledServiceImpl implements ScheduledService {
         LocalTime targetTime = LocalTime.parse("23:00:00");
         if (!time.isBefore(targetTime)) {
             log.info("Start clearing database");
-            System.out.println(bookingService.archivedUnpaidBookings());
+            System.out.println("have moved in archive" + bookingService.archivedUnpaidBookings());
             log.info("Finish clearing database");
         }
     }

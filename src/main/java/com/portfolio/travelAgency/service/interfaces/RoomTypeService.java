@@ -13,4 +13,13 @@ public interface RoomTypeService {
     RoomType findByNameAndHotelAndCity(String name, String hotel, String city);
 
     List<String> findTypesByCityAndHotel(String city, String hotel);
+
+    Integer findTheCheapestType(String city);
+
+    Integer findTheMostExpensiveType(String city);
+
+    Integer superMinPrice();
+
+    Integer superMaxPrice();
 }
+

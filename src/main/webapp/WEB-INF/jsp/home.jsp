@@ -14,6 +14,7 @@
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/other_script.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
 </head>
@@ -71,8 +72,30 @@
                 document.getElementById('earlyArrival').setAttribute("disabled", "");
                 document.getElementById('lateDeparture').setAttribute("disabled", "");
                 document.getElementById('reserveButton').setAttribute("disabled", "");
+
+                $.ajax({
+                    url: "home/citySelect?city=" + $("#selectCity").val(),
+                    success: function(result){
+                        var min_max = JSON.parse(result);
+                        document.getElementById("priceMin").value = min_max.minPrice;
+                        document.getElementById("priceMax").value = min_max.maxPrice;
+                    }
+                });
             }
         </script>
+
+        <div class="row" id="priceRange">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number" placeholder="price" value="${superMinPrice}" class="form-control" id="priceMin">
+                <label for="priceMin">Price min</label>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <input type="number" placeholder="price" value="${superMaxPrice}" class="form-control" id="priceMax">
+                <label for="priceMax">Price max</label>
+            </div>
+
+        </div>
+
         <div class="row">
             <div class="col-xs-12 col-sm-6" id="7">
                 <spring:bind path="arrival">
@@ -201,7 +224,6 @@
                     success: function(result){
 
                         var rooms = JSON.parse(result);
-
 
                         var price = rooms[0].price;
                         rooms.shift();

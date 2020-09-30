@@ -89,14 +89,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID")
 
-
+/*
 
                 .and()
                 .sessionManagement()
                 .invalidSessionUrl("/login")
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
-                .sessionRegistry(sessionRegistry())
+                .sessionRegistry(sessionRegistry())*/
         ;
     }
 }
