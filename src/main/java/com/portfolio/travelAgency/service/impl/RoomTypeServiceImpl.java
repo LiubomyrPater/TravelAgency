@@ -94,15 +94,19 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
-    public List<String> findRoomTypesAvailable(String city, String arrival, String departure, String hotel) {
+    public List<String> findRoomTypesAvailable(String city, String arrival, String departure, String hotel, Integer priceMin, Integer priceMax) {
 
-        return hotelRepository.findByNameAndCity(hotel, cityService.findByName(city)).get().getRooms()
+        List<RoomType> roomTypes = hotelRepository.findByNameAndCity(hotel, cityService.findByName(city)).get().getRooms()
                 .stream()
                 .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
                 .map(Room::getType)
-                .map(RoomType::getName)
                 .distinct()
                 .collect(Collectors.toList());
+
+        List<RoomType> availableByPrice = new ArrayList<>();
+
+
+        return roomTypes.stream().map(RoomType::getName).collect(Collectors.toList());
     }
 
     @Override

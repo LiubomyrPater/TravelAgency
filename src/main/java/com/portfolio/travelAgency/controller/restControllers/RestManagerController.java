@@ -48,13 +48,15 @@ public class RestManagerController {
         return userService.findAllDTO();
     }
 
-    @GetMapping("/getRoomsByTypeHotelCityAvailable_date/{type}, {hotel}, {city}, {arrival}, {departure}")
+    @GetMapping("/getRoomsByTypeHotelCityAvailable_date/{type}, {hotel}, {city}, {arrival}, {departure}, {priceMin}, {priceMax}")
     public List<String> getRoomsName(@PathVariable String type,
                                      @PathVariable String hotel,
                                      @PathVariable String city,
                                      @PathVariable String arrival,
-                                     @PathVariable String departure){
-        return roomService.findByCityDateHotelType(city, arrival, departure, hotel, type);
+                                     @PathVariable String departure,
+                                     @PathVariable Integer priceMin,
+                                     @PathVariable Integer priceMax){
+        return roomService.findByCityDateHotelType(city, arrival, departure, hotel, type, priceMin, priceMax);
     }
 
     @GetMapping("/getRoomsDTObyHotelID/{hotel_id}")

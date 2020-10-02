@@ -80,19 +80,28 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<String> findFreeHotels(String city, String arrival, String departure) {
+    public List<String> findFreeHotels(String city, String arrival, String departure, int priceMin, int priceMax) {
 
-        List<String> freeHotels = new ArrayList<>();
-
+        List<Hotel> freeHotels = new ArrayList<>();
         hotelRepository.findByCity(cityService.findByName(city))
                 .forEach(h -> h.getRooms()
                         .stream()
                         .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
-                        .map(r -> h.getName())
+                        .map(r -> h)
                         .distinct()
                         .forEach(freeHotels::add)
                 );
-        return freeHotels;
+
+        List<Hotel> availableByPrice = new ArrayList<>();
+        freeHotels.forEach(h -> h.getRoomTypes()
+                .stream()
+                .filter(t -> (priceMin <= t.getPrice() &&  t.getPrice() <= priceMax))
+                .map(t -> h)
+                .distinct()
+                .forEach(availableByPrice::add)
+        );
+
+        return availableByPrice.stream().map(Hotel::getName).collect(Collectors.toList());
     }
 
     @Override

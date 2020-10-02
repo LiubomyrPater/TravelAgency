@@ -9,7 +9,10 @@ public interface RoomService {
 
     void addRoomToHotel(RoomDTO roomDTO);
 
-    List<String> findByCityDateHotelType(String city, String arrival, String departure, String hotel, String typeRoom);
+    List<String> findByCityDateHotelType(String city, String arrival,
+                                         String departure, String hotel,
+                                         String typeRoom, Integer priceMin,
+                                         Integer priceMax);
 
     List<RoomDTO> findByHotelID(Long hotelID);
 

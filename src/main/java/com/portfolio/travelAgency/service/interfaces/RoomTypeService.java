@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RoomTypeService {
 
-    List<String> findRoomTypesAvailable(String city, String arrival, String departure, String hotel);
+    List<String> findRoomTypesAvailable(String city, String arrival, String departure, String hotel, Integer priceMin, Integer priceMax);
 
     List<String> roomTypesName();
 

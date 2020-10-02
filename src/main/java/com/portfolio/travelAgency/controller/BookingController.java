@@ -47,7 +47,10 @@ public class BookingController {
     @ResponseBody
     public String getDeparture(@RequestParam String arrival,
                                @RequestParam String departure,
-                               @RequestParam String city){
+                               @RequestParam String city,
+                               @RequestParam int priceMin,
+                               @RequestParam int priceMax
+    ){
 
         JSONObject jsonObjectDecide = new JSONObject();
         boolean decide = bookingService.matchDateDeparture(arrival, departure);
@@ -55,7 +58,7 @@ public class BookingController {
 
         if (decide){
             JSONArray jsonArrayHotels = new JSONArray();
-            hotelService.findFreeHotels(city, arrival, departure)
+            hotelService.findFreeHotels(city, arrival, departure, priceMin, priceMax)
                     .forEach(h -> {
                         JSONObject jsonObjectHotel = new JSONObject();
                         jsonObjectHotel.put("name", h);
@@ -69,13 +72,15 @@ public class BookingController {
     @GetMapping("/home/hotelSelectForm")
     @ResponseBody
     public String getHotel(@RequestParam String arrival,
-                          @RequestParam String departure,
-                          @RequestParam String city,
-                          @RequestParam String hotel){
-
+                           @RequestParam String departure,
+                           @RequestParam String city,
+                           @RequestParam String hotel,
+                           @RequestParam Integer priceMin,
+                           @RequestParam Integer priceMax
+    ){
         JSONArray jsonArrayTypes = new JSONArray();
 
-        roomTypeService.findRoomTypesAvailable(city, arrival, departure, hotel)
+        roomTypeService.findRoomTypesAvailable(city, arrival, departure, hotel, priceMin, priceMax)
                 .forEach(type -> {
                     JSONObject jsonObjectRoomType = new JSONObject();
                     jsonObjectRoomType.put("name", type);
@@ -91,15 +96,17 @@ public class BookingController {
                           @RequestParam String departure,
                           @RequestParam String city,
                           @RequestParam String hotel,
-                          @RequestParam String type){
-
+                          @RequestParam String type,
+                          @RequestParam Integer priceMin,
+                          @RequestParam Integer priceMax
+    ){
         JSONObject jsonObjectPrice = new JSONObject();
         jsonObjectPrice.put("price", hotelService.getPriceRoomType(hotel,city,type)
         );
 
         JSONArray jsonArrayRoom = new JSONArray();
         jsonArrayRoom.add(jsonObjectPrice);
-        roomService.findByCityDateHotelType(city, arrival, departure, hotel, type)
+        roomService.findByCityDateHotelType(city, arrival, departure, hotel, type, priceMin, priceMax)
                 .forEach(r -> {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("number", r);

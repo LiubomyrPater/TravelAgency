@@ -136,7 +136,9 @@
                     $.ajax({
                         url: "home/dateDepartureSelect?arrival=" + $("#dateArrival").val()
                         + "&departure=" + $("#dateDeparture").val()
-                        + "&city=" + $("#selectCity option:selected").val(),
+                        + "&city=" + $("#selectCity option:selected").val()
+                        + "&priceMin=" + $("#priceMin").val()
+                        + "&priceMax=" + $("#priceMax").val(),
                         success: function(result){
                             clearDropDownHotel();
                             $.each(JSON.parse(result), function(index, value) {
@@ -181,7 +183,9 @@
                     url: "home/hotelSelectForm?hotel=" + $("#selectHotel option:selected").val()
                     + "&city=" + $("#selectCity option:selected").val()
                     + "&arrival=" + $("#dateArrival").val()
-                    + "&departure=" + $("#dateDeparture").val(),
+                    + "&departure=" + $("#dateDeparture").val()
+                    + "&priceMin=" + $("#priceMin").val()
+                    + "&priceMax=" + $("#priceMax").val(),
                     success: function(result){
                         $('#selectType').removeAttr('disabled');//
                         clearDropDownType();
@@ -220,7 +224,9 @@
                     + "&city=" + $("#selectCity option:selected").val()
                     + "&arrival=" + $("#dateArrival").val()
                     + "&departure=" + $("#dateDeparture").val()
-                    + "&type=" + $("#selectType option:selected").val(),
+                    + "&type=" + $("#selectType option:selected").val()
+                    + "&priceMin=" + $("#priceMin").val()
+                    + "&priceMax=" + $("#priceMax").val(),
                     success: function(result){
 
                         var rooms = JSON.parse(result);
@@ -289,7 +295,6 @@
                 <spring:bind path="earlyArrival">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <form:checkbox path="earlyArrival" class="form-control" disabled="true" id="earlyArrival" label="Early arrival"></form:checkbox>
-                        <%--<form:errors path="earlyArrival"></form:errors>--%>
                     </div>
                 </spring:bind>
             </div>
@@ -297,7 +302,6 @@
                 <spring:bind path="lateDeparture">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <form:checkbox path="lateDeparture" class="form-control" disabled="true" id="lateDeparture" label="Late departure"></form:checkbox>
-                        <%--<form:errors path="lateDeparture"></form:errors>--%>
                     </div>
                 </spring:bind>
             </div>
