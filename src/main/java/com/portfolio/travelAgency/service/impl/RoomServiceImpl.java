@@ -68,10 +68,15 @@ public class RoomServiceImpl implements RoomService {
                 .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
                 .distinct()
                 .collect(Collectors.toList());
+        System.out.println(roomsAvailableByDate);
 
-        List<Room> roomsAvailableByPrice = new ArrayList<>();
+        List<Room> roomsAvailableByPrice = roomsAvailableByDate.stream()
+                .filter(r -> (priceMin <= r.getType().getPrice() && r.getType().getPrice() <= priceMax))
+                .collect(Collectors.toList());
+        System.out.println(roomsAvailableByPrice);
 
-        return roomsAvailableByDate.stream().map(Room::getNumber).collect(Collectors.toList());
+
+        return roomsAvailableByPrice.stream().map(Room::getNumber).collect(Collectors.toList());
     }
 
     @Override

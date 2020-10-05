@@ -103,10 +103,12 @@ public class RoomTypeServiceImpl implements RoomTypeService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        List<RoomType> availableByPrice = new ArrayList<>();
 
+        List<RoomType> availableByPrice = roomTypes.stream()
+                .filter(t -> (priceMin <= t.getPrice() && t.getPrice() <= priceMax))
+                .collect(Collectors.toList());
 
-        return roomTypes.stream().map(RoomType::getName).collect(Collectors.toList());
+        return availableByPrice.stream().map(RoomType::getName).collect(Collectors.toList());
     }
 
     @Override

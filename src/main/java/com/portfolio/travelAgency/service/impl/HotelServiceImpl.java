@@ -1,6 +1,7 @@
 package com.portfolio.travelAgency.service.impl;
 
 import com.portfolio.travelAgency.entity.Hotel;
+import com.portfolio.travelAgency.entity.Room;
 import com.portfolio.travelAgency.repository.HotelRepository;
 import com.portfolio.travelAgency.service.dto.HotelDTO;
 import com.portfolio.travelAgency.service.interfaces.BookingService;
@@ -93,13 +94,13 @@ public class HotelServiceImpl implements HotelService {
                 );
 
         List<Hotel> availableByPrice = new ArrayList<>();
-        freeHotels.forEach(h -> h.getRoomTypes()
-                .stream()
-                .filter(t -> (priceMin <= t.getPrice() &&  t.getPrice() <= priceMax))
-                .map(t -> h)
-                .distinct()
-                .forEach(availableByPrice::add)
-        );
+
+        freeHotels.forEach(hotel -> {
+            if (hotel.getRooms()
+                    .stream()
+                    .anyMatch(room -> priceMin <= room.getType().getPrice() && room.getType().getPrice() <= priceMax))
+                availableByPrice.add(hotel);
+        });
 
         return availableByPrice.stream().map(Hotel::getName).collect(Collectors.toList());
     }
