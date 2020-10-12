@@ -1,5 +1,6 @@
 package com.portfolio.travelAgency.controller;
 
+import com.portfolio.travelAgency.config.HttpSessionConfig;
 import com.portfolio.travelAgency.controller.validator.AddHotelValidator;
 import com.portfolio.travelAgency.controller.validator.AddRoomValidator;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
@@ -29,6 +30,7 @@ public class ManagerController {
     private final UserService userService;
     private final BookingService bookingService;
     private final RoomTypeService roomTypeService;
+
 
     @GetMapping("/management")
     public String managementPage() {
@@ -103,6 +105,8 @@ public class ManagerController {
         model.addAttribute("hotels", hotelDTOS);
         return "hotels";
     }
+
+
 
     @GetMapping("/management/bookings")
     public String userBookings (@RequestParam("userId") Long userId,

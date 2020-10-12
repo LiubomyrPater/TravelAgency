@@ -10,13 +10,10 @@
     <meta charset="utf-8">
     <title>Travel Agency ${pageContext.request.userPrincipal.name}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/other_script.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-
 </head>
 <body>
 <div class="text-center" role="toolbar" aria-label="Toolbar with buttons">
@@ -26,7 +23,7 @@
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="POST" action="${contextPath}/logout"></form>
     </c:if>
-    <sec:authorize access="hasRole('ROLE_MANAGER')">
+    <sec:authorize access="hasAnyRole( 'ROLE_ADMIN','ROLE_MANAGER')">
         <h4><a class="nav-link" href="/management">Management</a></h4>
     </sec:authorize>
 
@@ -36,7 +33,7 @@
 
     <form:form method="POST" modelAttribute="bookingForm" class="form-signin" id="777">
 
-        <sec:authorize access="hasRole('ROLE_MANAGER')">
+        <sec:authorize access="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
             <spring:bind path="user">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:select type="text" path="user" class="form-control">
@@ -46,7 +43,7 @@
             </spring:bind>
         </sec:authorize>
 
-        <sec:authorize access="hasRole('ROLE_USER')">
+        <sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
             <spring:bind path="user">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input readonly="true" type="text" path="user" class="form-control"></form:input>
@@ -57,7 +54,7 @@
         <spring:bind path="city">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:select type="text" path="city" id="selectCity" class="form-control" onchange="city_select()">
-                    <form:option value="--- Select ---" label="--- Select city ---"/>
+                    <form:option value="" label="--- Select city ---"  id="default_city_field_value"/>
                     <form:options items="${cities}"/>
                 </form:select>
             </div>
@@ -72,6 +69,7 @@
                 document.getElementById('earlyArrival').setAttribute("disabled", "");
                 document.getElementById('lateDeparture').setAttribute("disabled", "");
                 document.getElementById('reserveButton').setAttribute("disabled", "");
+                document.getElementById('default_city_field_value').setAttribute("disabled", "");
 
                 $.ajax({
                     url: "home/citySelect?city=" + $("#selectCity").val(),
@@ -86,13 +84,23 @@
 
         <div class="row" id="priceRange">
             <div class="col-xs-12 col-sm-6">
-                <input type="number" placeholder="price" value="${superMinPrice}" class="form-control" id="priceMin">
+                <input type="number" placeholder="price" value="${superMinPrice}" class="form-control" id="priceMin" onchange="change_price_min()">
                 <label for="priceMin">Price min</label>
             </div>
+            <script>
+                function change_price_min() {
+
+                }
+            </script>
             <div class="col-xs-12 col-sm-6">
-                <input type="number" placeholder="price" value="${superMaxPrice}" class="form-control" id="priceMax">
+                <input type="number" placeholder="price" value="${superMaxPrice}" class="form-control" id="priceMax" onchange="change_price_max()">
                 <label for="priceMax">Price max</label>
             </div>
+            <script>
+                function change_price_max() {
+
+                }
+            </script>
 
         </div>
 
@@ -100,8 +108,7 @@
             <div class="col-xs-12 col-sm-6" id="7">
                 <spring:bind path="arrival">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="date" path="arrival" class="form-control" id="dateArrival" disabled="true" onchange="dateArrivalSelect()"
-                                    placeholder="Arrival" ></form:input>
+                        <form:input type="date" path="arrival" class="form-control" id="dateArrival" disabled="true" onchange="dateArrivalSelect()"></form:input>
                         <form:errors path="arrival"></form:errors>
                     </div>
                 </spring:bind>
@@ -125,8 +132,7 @@
             <div class="col-xs-12 col-sm-6">
                 <spring:bind path="departure">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="date" path="departure" disabled="true" class="form-control" id="dateDeparture" onchange="dateDepartureSelect()"
-                                    placeholder="departure"></form:input>
+                        <form:input type="date" path="departure" disabled="true" class="form-control" id="dateDeparture" onchange="dateDepartureSelect()"></form:input>
                         <form:errors path="departure"></form:errors>
                     </div>
                 </spring:bind>
@@ -167,8 +173,11 @@
 
         <spring:bind path="hotel">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="hotel" id="selectHotel" class="form-control" disabled="true" onclick="hotel_select()">
+                <form:select type="text" path="hotel" id="selectHotel"
+                             class="form-control" disabled="true" onclick="hotel_select()">
+
                 </form:select>
+
             </div>
         </spring:bind>
         <script>

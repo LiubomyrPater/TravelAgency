@@ -17,10 +17,11 @@
 <body>
 <div>
     <button type="button" onclick='window.location.href = "/home"'>Home</button>
-    <button type="button" onclick='window.location.href = "/management/addHotel"'>Add hotels</button>
-    <button type="button" onclick='window.location.href = "/management/addRoom"'>Add rooms to the hotel</button>
-    <button type="button" onclick='window.location.href = "/management/users"'>View users</button>
-    <button type="button" onclick='window.location.href = "/management/hotels"'>Manage hotels</button>
+    <button type="button" onclick='window.location.href = "/management"'>Management</button>
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <button type="button" onclick='window.location.href = "/admin/sessions"'>Sessions</button>
+    </sec:authorize>
+
 </div>
 
 

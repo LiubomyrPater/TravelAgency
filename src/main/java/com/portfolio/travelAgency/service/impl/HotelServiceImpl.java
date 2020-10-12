@@ -90,17 +90,14 @@ public class HotelServiceImpl implements HotelService {
                         .filter(r -> bookingService.checkAvailabilityRooms(r.getBookings(), arrival, departure))
                         .map(r -> h)
                         .distinct()
-                        .forEach(freeHotels::add)
-                );
+                        .forEach(freeHotels::add));
 
-        List<Hotel> availableByPrice = new ArrayList<>();
 
-        freeHotels.forEach(hotel -> {
-            if (hotel.getRooms()
-                    .stream()
-                    .anyMatch(room -> priceMin <= room.getType().getPrice() && room.getType().getPrice() <= priceMax))
-                availableByPrice.add(hotel);
-        });
+        List<Hotel> availableByPrice = freeHotels.stream()
+                .filter(hotel -> hotel.getRooms()
+                        .stream()
+                        .anyMatch(room -> priceMin <= room.getType().getPrice() && room.getType().getPrice() <= priceMax))
+                .collect(Collectors.toList());
 
         return availableByPrice.stream().map(Hotel::getName).collect(Collectors.toList());
     }

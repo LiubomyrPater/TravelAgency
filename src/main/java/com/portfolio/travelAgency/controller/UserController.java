@@ -43,16 +43,7 @@ public class UserController {
         model.addAttribute("superMinPrice", roomTypeService.superMinPrice());
 
         model.addAttribute("superMaxPrice", roomTypeService.superMaxPrice());
-/*
-        List<String> hotelName = hotelService.hotelsName();
-        model.addAttribute("hotels", hotelName);
 
-        List<String> roomNumber = roomService.roomsName();
-        model.addAttribute("rooms", roomNumber);
-
-        List<String> roomTypes = roomTypeService.roomTypesName();
-        model.addAttribute("roomTypes", roomTypes);
-*/
         return "home";
     }
 
@@ -62,10 +53,14 @@ public class UserController {
                           BindingResult bindingResult){
 
         bookingValidator.validate(bookingDTO, bindingResult);
-        if (bindingResult.hasErrors())
+
+        if (bindingResult.hasErrors()){
+            System.out.println("datedatedate");
             return "home";
+        }
 
         bookingService.createNewBooking(bookingDTO);
+
         return userService.findByEmail(principal.getName())
                 .getRole()
                 .contains(roleRepository.findByName("ROLE_MANAGER")) ? "redirect:/management/users" : "redirect:/home/bookings";

@@ -73,17 +73,5 @@ public class UserValidator implements Validator {
             errors.rejectValue("phoneNumber", "phoneNumber.exist", "User with these phone number already exist!");
 
 
-/*
-        if (userDTO.getCountry().matches("--- Select ---")){
-            errors.rejectValue("country", "selectPlease", "Select please");
-        }
-
-        if (userDTO.getLanguage().matches("--- Select ---")){
-            errors.rejectValue("language", "selectPlease", "Select please");
-        }*/
-
-
-
-
     }
 }

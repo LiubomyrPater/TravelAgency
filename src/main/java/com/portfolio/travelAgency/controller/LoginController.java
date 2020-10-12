@@ -71,7 +71,7 @@ public class LoginController {
                 .getRole()
                 .contains(roleRepository.findByName("ROLE_ADMIN"))
                 )
-            return "redirect:management";
+            return "redirect:admin";
         else
             return "redirect:home";
     }
