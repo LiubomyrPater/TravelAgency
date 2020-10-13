@@ -25,7 +25,7 @@ public class HotelController {
 
         List<RoomDTO> roomDTOS = roomService.findByHotelID(hotelId);
         model.addAttribute("rooms", roomDTOS);
-        return "rooms";
+        return "managerPages/rooms";
     }
 
 
@@ -35,6 +35,6 @@ public class HotelController {
 
         List<BookingDTO> bookingDTOS = bookingService.findAllByRoom(roomId);
         model.addAttribute("bookings", bookingDTOS);
-        return "roomBookings";
+        return "managerPages/bookingsByRoom";
     }
 }

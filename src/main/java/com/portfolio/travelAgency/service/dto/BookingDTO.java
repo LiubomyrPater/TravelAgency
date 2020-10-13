@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Setter
 public class BookingDTO {
 
+    private Long id;
+
     private String user;
 
     private String city;
@@ -30,4 +32,6 @@ public class BookingDTO {
     private boolean lateDeparture;
 
     private boolean earlyArrival;
+
+    private boolean paid;
 }

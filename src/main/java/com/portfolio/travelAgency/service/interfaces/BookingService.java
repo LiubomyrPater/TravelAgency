@@ -31,4 +31,6 @@ public interface BookingService {
 
     List<BookingsArchived> archivedUnpaidBookings();
 
+    boolean deleteBookingByID(Long ID);
+
 }

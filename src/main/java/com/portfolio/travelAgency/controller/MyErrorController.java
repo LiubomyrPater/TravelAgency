@@ -24,11 +24,11 @@ public class MyErrorController implements ErrorController {
             int statusCode = Integer.parseInt((status.toString()));
 
             if (statusCode == HttpStatus.NOT_FOUND.value()){
-                return "404";
+                return "errors/404";
             }else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()){
-                return "500";
+                return "errors/500";
             }else if (statusCode == HttpStatus.FORBIDDEN.value()){
-                return"403";
+                return "errors/403";
             }
         }
         return "error";

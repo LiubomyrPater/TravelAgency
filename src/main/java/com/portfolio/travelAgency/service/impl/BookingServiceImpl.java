@@ -29,6 +29,15 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
+    public boolean deleteBookingByID(Long ID) {
+        if (bookingRepository.findById(ID).isPresent()){
+            bookingRepository.deleteById(ID);
+            return !bookingRepository.findById(ID).isPresent();
+        }else
+            return false;
+    }
+
+    @Override
     public List<BookingsArchived> archivedTodayBookings() {
         List<Booking> oldBookings = bookingRepository.findAllByDepartureEquals(LocalDate.now());
         List<BookingsArchived> bookingsArchived = oldBookings

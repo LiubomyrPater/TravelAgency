@@ -41,21 +41,21 @@ public class LoginController {
             else
                 return "redirect:home";
         }
-        return "login";
+        return "commonPages/login";
     }
 
     @GetMapping("/login")
     public String getLoginPage(Principal principal) {
         if(principal != null)
             return "redirect:/home";
-        return "login";
+        return "commonPages/login";
     }
 
 
     @GetMapping("/registration")
     public String registrationPage(Model model) {
         model.addAttribute("userForm", new UserDTO());
-        return "registration";
+        return "commonPages/registration";
     }
 
     @GetMapping("/confirmRegistration")
@@ -84,10 +84,10 @@ public class LoginController {
     {
         userValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "commonPages/registration";
         }
         User user = userService.registerNewUser(userDTO);
         eventPublisher.publishEvent(new RegisterUserEvent(this, user, request.getContextPath()));
-        return "success";
+        return "commonPages/success";
     }
 }

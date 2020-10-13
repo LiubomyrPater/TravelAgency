@@ -1,6 +1,5 @@
 package com.portfolio.travelAgency.controller;
 
-import com.portfolio.travelAgency.config.HttpSessionConfig;
 import com.portfolio.travelAgency.controller.validator.AddHotelValidator;
 import com.portfolio.travelAgency.controller.validator.AddRoomValidator;
 import com.portfolio.travelAgency.service.dto.BookingDTO;
@@ -35,12 +34,12 @@ public class ManagerController {
     @GetMapping("/management")
     public String managementPage() {
         /*System.out.println(bookingService.archivedOldBookings());*/
-        return "management";
+        return "managerPages/management";
     }
 
     @GetMapping("/restManagement")
     public String restManagementPage() {
-        return "restManagement";
+        return "managerPages/restManagement";
     }
 
 
@@ -49,7 +48,7 @@ public class ManagerController {
         model.addAttribute("addHotelForm", new HotelDTO());
         List<String> cityName = cityService.citiesName();
         model.addAttribute("cities",cityName);
-        return "addHotel";
+        return "managerPages/addHotel";
     }
 
 
@@ -61,7 +60,7 @@ public class ManagerController {
         if (bindingResult.hasErrors()) {
             List<String> cityName = cityService.citiesName();
             model.addAttribute("cities",cityName);
-            return "addHotel";
+            return "managerPages/addHotel";
         }
         hotelService.addHotelToCity(hotelDTO);
         return "redirect:/";
@@ -76,7 +75,7 @@ public class ManagerController {
         List<String> cityName = cityService.citiesName();
         model.addAttribute("cities",cityName);
 
-        return "addRoom";
+        return "managerPages/addRoom";
     }
 
     @PostMapping("/management/addRoom")
@@ -84,10 +83,10 @@ public class ManagerController {
                                BindingResult bindingResult){
         addRoomValidator.validate(roomDTO, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "addRoom";
+            return "managerPages/addRoom";
         }
         roomService.addRoomToHotel(roomDTO);
-        return "addRoom";
+        return "managerPages/addRoom";
     }
 
     @GetMapping("/management/users")
@@ -95,7 +94,7 @@ public class ManagerController {
 
         List<UserDTO> userDTOS = userService.findAllDTO();
         model.addAttribute("users", userDTOS);
-        return "users";
+        return "managerPages/users";
     }
 
     @GetMapping("/management/hotels")
@@ -103,7 +102,7 @@ public class ManagerController {
 
         List<HotelDTO> hotelDTOS = hotelService.findAll();
         model.addAttribute("hotels", hotelDTOS);
-        return "hotels";
+        return "managerPages/hotels";
     }
 
 
@@ -113,7 +112,7 @@ public class ManagerController {
                                 Model model){
         List<BookingDTO> bookings = bookingService.findUserBookingByID(userId);
         model.addAttribute("bookings", bookings);
-        return "bookings";
+        return "commonPages/bookingsByUser";
     }
 
     @GetMapping("/management/citySelectForm")

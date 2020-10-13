@@ -4,7 +4,6 @@ package com.portfolio.travelAgency.controller;
 import com.portfolio.travelAgency.config.HttpSessionConfig;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,7 @@ public class AdminController {
     @GetMapping("/admin")
     public String managementPage() {
         /*System.out.println(bookingService.archivedOldBookings());*/
-        return "admin";
+        return "adminPages/admin";
     }
 
     @GetMapping("/admin/sessions")
@@ -29,6 +28,6 @@ public class AdminController {
 
         model.addAttribute("sessionList", httpSessionConfig.getActiveSessions());
 
-        return "sessions";
+        return "adminPages/sessions";
     }
 }

@@ -44,7 +44,7 @@ public class UserController {
 
         model.addAttribute("superMaxPrice", roomTypeService.superMaxPrice());
 
-        return "home";
+        return "commonPages/home";
     }
 
     @PostMapping("/home")
@@ -56,7 +56,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()){
             System.out.println("datedatedate");
-            return "home";
+            return "commonPages/home";
         }
 
         bookingService.createNewBooking(bookingDTO);
@@ -71,6 +71,6 @@ public class UserController {
 
         List<BookingDTO> bookings = bookingService.findUserBookingsByEmail(principal.getName());
         model.addAttribute("bookings", bookings);
-        return "bookings";
+        return "commonPages/bookingsByUser";
     }
 }

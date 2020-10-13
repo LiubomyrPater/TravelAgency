@@ -57,6 +57,8 @@ public class BookingMapper {
         result.setTypeRoom(booking.getRoom().getType().getName());
         result.setHotel(booking.getRoom().getHotel().getName());
         result.setCity(cityRepository.findByHotels(booking.getRoom().getHotel()).getName());
+        result.setPaid(booking.isPaid());
+        result.setId(booking.getId());
 
         return result;
     }

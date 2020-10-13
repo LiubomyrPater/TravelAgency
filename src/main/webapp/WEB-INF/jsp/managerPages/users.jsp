@@ -26,7 +26,6 @@
                     <th><spring:message code="users.enabled"/></th>
                     <th><spring:message code="users.role"/></th>
                     <th><spring:message code="users.bookings"/></th>
-
                 </tr>
 
                 <tbody>
